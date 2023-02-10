@@ -8,7 +8,11 @@ from core import views
 urlpatterns = [
     path('cadastrar_usuario/', views.cadastrar_usuario, name='cadastrar_usuario'),
     path('clientes/', views.clientes, name='clientes'),
-    path('cliente/delete/<id>', views.cliente_delete, name='clientes'),
+    path('cliente/delete/<id>', views.cliente_delete, name='cliente_delete'),
+
+    path('quartos/', views.quartos, name='quartos'),
+    path('quarto/delete/<id>', views.quarto_delete, name='quarto_delete'),
+
 
     path('accounts/', include('django.contrib.auth.urls')), #LOGIN
     path('accounts/logout', views.logout_view, name='logout'), #LOGOUT

@@ -1,0 +1,93 @@
+{% extends 'base/base.html' %}
+
+{%block content%}
+
+<!-- Modal -->
+<div class="modal fade" id="modalcadastroquarto" tabindex="-1" aria-labelledby="modalcadastroquartoLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalcadastroquartoLabel">Cadastro de novo Quarto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" class="form-inline">
+        {% csrf_token %} 
+        <div class="modal-body"> <!-- INICIO modal-body-->
+    
+          <div class="row col-md-12"> <!-- INICIO Tipo-->
+            <label for="tipo" class="form-label">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" class="form-control " placeholder="Tipo do Quarto" required autofocus>
+          </div> <!-- FIM Tipo-->
+    
+          <div class="row"><!-- INICIO Numero e Capacidade -->
+            <div class="col-md-6">
+              <label for="numero" class="form-label espaco_abaixo">Número:</label>
+              <input type="number" id="numero" name="numero" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label for="capacidade" class="form-label espaco_abaixo">Capacidade:</label>
+              <input type="number" id="capacidade" name="capacidade" class="form-control" required>
+            </div>
+          </div> <!-- fim Numero e Capacidade-->
+
+          <div class="row col-md-12"> <!-- INICIO Tipo-->
+            <label for="descricao" class="form-label espaco_abaixo">Descrição:</label>
+            <textarea type="text" id="descricao" name="descricao" class="form-control " placeholder="Descrição do Quarto" required autofocus></textarea>
+          </div> <!-- FIM Tipo-->
+        </div> <!-- FIM modal-body-->
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <h1 class="titulo_centro">Quartos Cadastrados</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+    <form method="get" id="search-form" class="form-inline">
+      <div class="input-group mb-3">
+        <input class="form-control" type="search" name="search"  id="search" placeholder="Buscar Quarto" aria-label="Buscar" />
+        <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-5"></div>
+  <div class="col-md-1">
+    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalcadastroquarto">+Quarto</button> 
+  </div>
+
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Número:</th>
+          <th>Tipo:</th>
+          <th>Capacidade:</th>
+          <th>Descrição:</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in quartos %}
+          <tr>
+            <td>{{ item.numero }}</td>
+            <td>{{ item.tipo }}</td>
+            <td>{{ item.capacidade }} Pessoas</td>
+            <td>{{ item.descricao }}</td>
+            <td>
+                <a type="button" class="far fa-trash-alt" href="/quarto/delete/{{item.id}}" style="font-size:20px; color:#FF0000"></a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

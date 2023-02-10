@@ -20,9 +20,16 @@ def cadastrar_usuario(request):
         form_usuario = UserCreationForm()
     return render(request, 'core/cadastro.html', {'form_usuario': form_usuario})
 
+@login_required
+def home(request):
+    #HOMEEEEE
+
+    return render(request, 'core/home.html', {'titulo':'Home'})
+
+
+@login_required
 def clientes(request):
-    
-    ## CADASTRO DE CLIENTE POST
+    ##CADASTRO DE CLIENTE POST
     if request.method == 'POST':
         nome = request.POST.get("nome")
         cpf = request.POST.get("cpf")
@@ -60,7 +67,7 @@ def clientes(request):
                 endereco = endereco_cad)
         hospede_cad.save
         return redirect('clientes') 
-    #####  FIM DO CADASTRO DO CLIENTE
+    #####FIM DO CADASTRO DO CLIENTE
 
 
     hospedes = Hospede.objects.filter(habilitado = True, usuario=request.user).order_by('nome')
@@ -73,28 +80,70 @@ def clientes(request):
 
     return render(request, 'core/clientes.html', {'titulo':'Clientes', 'hospedes':hospedes})
 
+
+@login_required
+def quartos(request):    
+    ##CADASTRO DE QUARTO POST
+    if request.method == 'POST':   
+        quarto_cad = Quarto.objects.create(
+                usuario = request.user,
+                tipo = request.POST.get("tipo"),
+                numero = request.POST.get("numero"),
+                capacidade = request.POST.get("capacidade"),
+                descricao = request.POST.get("descricao")
+        )
+        quarto_cad.save
+
+        return redirect('quartos') 
+    #####  FIM DO CADASTRO DO QUARTO
+
+
+    quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero')
+
+    ## botão de buscar hospede get
+    buscar = request.GET.get('search')
+    if buscar:
+        quartos = Quarto.objects.filter(habilitado = True, usuario=request.user, numero__icontains = buscar).order_by('numero')
+    ####### FIM DO BUSCAR
+
+    return render(request, 'core/quartos.html', {'titulo':'Quartos', 'quartos':quartos})
+
+
+@login_required
 def cliente_delete(request, id):
     desabilitar = Hospede.objects.get(id=id)
     desabilitar.habilitado = False
     desabilitar.save()
     return redirect('clientes')
- 
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('home')
-
 
 @login_required
-def home(request):
-    return render(request, 'core/home.html', {'titulo':'Home'})
+def quarto_delete(request, id):
+    desabilitar = Quarto.objects.get(id=id)
+    desabilitar.habilitado = False
+    desabilitar.save()
+    return redirect('quartos')
 
 
 @login_required
 def reservar(request):
 
-    return render(request, 'core/reservar.html', {'titulo':'Cadastro de Reserva'})
+
+    quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero')
+    return render(request, 'core/reservar.html', {'titulo':'Cadastro de Reserva', 'quartos':quartos})
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+
+
+
+
+
+
+
 
 
 
@@ -118,3 +167,5 @@ def disponibilidade(request):
         item.data_reserva = '{}/{}/{}'.format(item.data_reserva.day, item.data_reserva.month,item.data_reserva.year)
 
     return render(request, 'core/disponibilidade.html', {'titulo':'Reservas Feitas', 'hospedados':hospedados})
+
+

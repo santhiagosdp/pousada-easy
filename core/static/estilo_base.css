@@ -49,3 +49,8 @@
     label.espaco_abaixo {
         padding-top: 25px;
     }
+    
+    #linha_horizontal {
+        width: 100%;
+        border-bottom: 1px solid #908f81;
+    }

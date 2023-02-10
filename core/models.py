@@ -25,12 +25,16 @@ class Hospedado(models.Model):
 class Quarto(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
     numero = models.IntegerField()
     tipo = models.CharField(max_length=200)
-    pessoas_suporta = models.IntegerField()
+    capacidade = models.IntegerField(default=0)
+    descricao = models.CharField(max_length=200, default="")
+
     def criacao(self):
         self.data_criacao = timezone.now()
         self.save()
+
 
 
 class Endereco (models.Model):
@@ -83,6 +87,7 @@ class Hospedes_reserva(models.Model):
 class Produto (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
     nome = models.CharField(max_length=200)
     valor = models.FloatField()
     descricao = models.CharField(max_length=200)
@@ -100,6 +105,7 @@ class Fechamento_conta (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
     hospedes_reserva = models.ForeignKey(Hospedes_reserva, on_delete=models.PROTECT)
+    pago = models.BooleanField(default=False)
     valor_consumo = models.FloatField()
     valor_diarias = models.FloatField()
     desconto_conta = models.FloatField()
