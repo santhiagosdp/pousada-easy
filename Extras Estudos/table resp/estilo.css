@@ -1,0 +1,29 @@
+body{
+	font-family:Verdana;
+}
+
+#tabela{
+	width:100%;
+	border:solid 1px;
+	text-align:left;
+   	border-collapse:collapse; 
+}
+
+#tabela tbody tr{
+	border:solid 1px;
+	height:30px;
+	cursor:pointer;
+}
+
+#tabela thead{
+	background:beige;
+}
+
+#tabela thead th:nth-child(1){
+	width:100px;
+}
+
+#tabela input{
+	color:navy;
+	width:100%;
+}

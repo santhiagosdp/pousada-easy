@@ -1,0 +1,51 @@
+    /*body{
+	font-family:Verdana;
+}
+
+#tabela{
+	width:100%;
+	border:solid 1px;
+	text-align:left;
+   	border-collapse:collapse; 
+}
+
+#tabela tbody tr{
+	border:solid 1px;
+	height:30px;
+	cursor:pointer;
+}
+
+#tabela thead{
+	background:beige;
+}
+
+#tabela thead th:nth-child(1){
+	width:100px;
+}
+
+#tabela input{
+	color:navy;
+	width:100%;
+}
+
+*/
+    
+    .titulo_centro {
+        font-family: 'Poppins';
+        font-style: bold;
+        font-size: 2em;
+        text-align: center;
+        margin-top: 1em;
+        padding: 25px;
+        padding-top: 20px;
+    }
+    
+    .botao_centro {
+        text-align: center;
+        padding: 10px;
+        padding-top: 10px;
+    }
+    
+    label.espaco_abaixo {
+        padding-top: 25px;
+    }

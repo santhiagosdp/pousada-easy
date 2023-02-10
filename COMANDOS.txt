@@ -1,0 +1,32 @@
+
+#### criando e ativando a VENV
+pip install virtualenv
+virtualenv venv
+venv/Scripts/Activate
+
+##### Instalando e configurando Django
+python.exe -m pip install --upgrade pip
+pip indtall django
+
+#### Criando o Projeto na mesma pasta
+django-admin.exe startproject pousadaeasy .   #### Observe que tem o ponto no final. 
+
+python manage.py migrate
+python manage.py startapp core  ####primeira Aplicação
+
+##ALTERAÇÃO DE SETTINGS.py
+    ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    LANGUAGE_CODE = 'pt-BR'
+    TIME_ZONE = 'America/Sao_Paulo'
+    INSTALLED_APPS = [ ...  'blog']
+
+python manage.py createsuperuser
+
+
+
+
+
+
+

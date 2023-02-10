@@ -1,0 +1,86 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+  <h1 class="titulo_centro">Reservas</h1>
+
+  <form method="get" id="search-form" class="form-inline">
+    <!-- {% csrf_token %} -->
+    <div class="row">
+      <div class="col-md-2">
+        <label for="numero_quarto" class="form-label">Número do Quarto</label>
+        <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
+        <div id="numero_quarto" class="form-text"></div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="hospede" class="form-label">Nome do Hospede</label>
+        <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" />
+        <div id="hospede" class="form-text"></div>
+      </div>
+
+      <div class="col-auto">
+        <label for="check-in" class="form-label">Data de check-in</label>
+        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" />
+        <div id="check-in" class="form-text"></div>
+      </div>
+
+      <div class="col-auto">
+        <label for="check-out" class="form-label">Data de check-out</label>
+        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" />
+        <div id="check-out" class="form-text"></div>
+      </div>
+
+      <!--              <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
+          <label class="form-check-label" for="exampleCheck1"></label>
+        </div>             -->
+    </div>
+
+    <div class="row botao_centro">
+      <div class="col-md-5"></div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </div>
+    </div>
+  </form>
+
+  <br />
+
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Quarto</th>
+          <th>Status</th>
+          <th>Hospede</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Diárias</th>
+          <th>Valor Diarias</th>
+          <th>Valor Comanda</th>
+        </tr>
+        <!--                
+                  <tr>
+                    <th><input type="text" id="txtColuna1"/></th>
+                    <th><input type="text" id="txtColuna2"/></th>
+                    <th><input type="text" id="txtColuna3"/></th>
+                  </tr>
+                                -->
+      </thead>
+      <tbody>
+        {% for item in hospedados %}
+          <tr>
+            <td>{{ item.numero_quarto }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.nome_hospede }}</td>
+            <td>{{ item.data_entrada }}</td>
+            <td>{{ item.data_saida }}</td>
+            <td>{{ item.diarias }}</td>
+            <td>{{ item.valor_quarto }}</td>
+            <td>{{ item.valor_comanda }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
