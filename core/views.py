@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime,timedelta, date
 
 from .models import Hospedado, Quarto, Hospede,Endereco,Reserva,Hospedes_reserva, Produto, Comanda_consumo, Fechamento_conta
 
@@ -126,10 +126,56 @@ def quarto_delete(request, id):
 
 @login_required
 def reservar(request):
+    quartos = []
+
+        ## botão de buscar hospede get
+    checkin = request.GET.get('checkin')    
+    checkout = request.GET.get('checkout')
+    quantidade_hospedes = request.GET.get('quantidade_hospedes')
+
+    if checkin and checkout and quantidade_hospedes:
+        checkin = datetime.strptime(checkin, "%Y-%m-%d")
+        checkout = datetime.strptime(checkout, "%Y-%m-%d")
+        quantidade_hospedes = int(quantidade_hospedes)
 
 
-    quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero')
-    return render(request, 'core/reservar.html', {'titulo':'Cadastro de Reserva', 'quartos':quartos})
+        quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero') #__icontains
+        reservas = Reserva.objects.filter(usuario=request.user).order_by('data_entrada') #habilitado = True
+        disponiveis = []
+        datas = []
+        data = checkin
+        while data < checkout:
+            datas.append(data)
+            data = data+timedelta(1)
+        print ('#################### APÓS WHILE')    
+        print(datas)
+
+        for reserva in reservas:
+            reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
+            print ('####################  ENTROU EM RESERVAS FOR')
+            for data in datas:
+                print ('####################  ENTROU EM DATAS FOR') 
+                print (reserva.data_entrada )
+                print ( data )
+                if reserva.data_entrada != data:
+                    print ('#################### ENTROU EM RESERVA IF')
+                    print (reserva.data_entrada )
+                    print (data)
+                    disponiveis.append(reserva.quarto)
+                    
+                    
+
+
+        '''print ('####################')
+        data1 = checkin
+        data2 = checkout
+        print (data2+timedelta(1))
+        '''
+
+    ####### FIM DO BUSCAR
+
+    return render(request, 'core/reservar.html', {'titulo':'Cadastro de Reserva', 'quartos':disponiveis})
+
 
 
 @login_required

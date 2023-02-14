@@ -67,10 +67,10 @@ class Hospede (models.Model):
 
 class Reserva (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    data_criacao = models.DateTimeField(default=timezone.now)
+    data_criacao = models.DateField(default=timezone.now)
     quarto = models.ForeignKey(Quarto, on_delete=models.PROTECT)
-    data_entrada = models.DateTimeField(blank=True, null=False)
-    data_saida = models.DateTimeField(blank=True, null=False)
+    data_entrada = models.DateField(blank=True, null=False)
+    data_saida = models.DateField(blank=True, null=False)
     diarias = models.IntegerField()
     valor = models.FloatField()
 

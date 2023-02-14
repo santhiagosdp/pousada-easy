@@ -132,7 +132,7 @@
 
   <h1 class="titulo_centro">Reservar Quarto</h1>
 
-  <!-- 
+  <!--  
   <div class="row">
     <div class="col-md-6">
     <form method="get" id="search-form" class="form-inline">
@@ -180,9 +180,10 @@
     </table>
   </div>  
 
- -->
+  -->
 
-  <form method="get" id="search-form" class="form-inline"> <!-- FORM GET CONSULTA QUARTOS DISPONIVEIS-->
+  <form method="get" id="search-form" class="form-inline">
+    <!-- FORM GET CONSULTA QUARTOS DISPONIVEIS -->
     <div class="row">
       <!-- INICIO ROW DATAS -->
       <div class="col-md-1"></div>
@@ -198,17 +199,17 @@
 
       <div class="col-md-3">
         <label for="quantidade_hospedes" class="form-label">Quantos Hospedes:</label>
-      <div class="col-md-3">
-        <select id="quantidade_hospedes" name="quantidade_hospedes" class="form-control" required>
-          <option value="" align="center" disabled selected>0</option>
-          <option value="1" align="center">1</option>
-          <option value="2" align="center">2</option>
-          <option value="3" align="center">3</option>
-          <option value="4" align="center">4</option>
-          <option value="4" align="center">5</option>
-          <option value="4" align="center">6</option>
-        </select>
-      </div>
+        <div class="col-md-3">
+          <select id="quantidade_hospedes" name="quantidade_hospedes" class="form-control" required>
+            <option value="" align="center" disabled selected>0</option>
+            <option value="1" align="center">1</option>
+            <option value="2" align="center">2</option>
+            <option value="3" align="center">3</option>
+            <option value="4" align="center">4</option>
+            <option value="4" align="center">5</option>
+            <option value="4" align="center">6</option>
+          </select>
+        </div>
       </div>
     </div> <!-- INICIO ROW DATAS -->
     <br />
@@ -226,17 +227,15 @@
 
   {% for item in quartos %}
 
-    <div class="card" style="width: 50%;">
+    <div class="card" style="width: 100%;">
       <div class="card-body">
-        <h5 class="card-title">{{item.numero}}</h5>
-        <h5 class="card-text">{{item.tipo}} (até {{item.capacidade}} pessoas)</h5>
-        <p class="card-text">{{item.descricao}}</p>
+        <h5 class="card-title">{{ item.numero }}</h5>
+        <h5 class="card-text">{{ item.tipo }} (até {{ item.capacidade }} pessoas)</h5>
+        <p class="card-text">{{ item.descricao }}</p>
         <a href="#" class="btn btn-outline-success">Reservar</a>
       </div>
     </div>
-    <br>
-
+    <br />
+    
   {% endfor %}
-
-
 {% endblock %}
