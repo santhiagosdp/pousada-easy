@@ -30,10 +30,10 @@
         <div id="check-out" class="form-text"></div>
       </div>
 
-      <!--              <div class="mb-3 form-check">
+      <!--               <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1" />
           <label class="form-check-label" for="exampleCheck1"></label>
-        </div>             -->
+        </div>              -->
     </div>
 
     <div class="row botao_centro">
@@ -51,33 +51,28 @@
       <thead>
         <tr>
           <th>Quarto</th>
-          <th>Status</th>
           <th>Hospede</th>
           <th>Check-in</th>
           <th>Check-out</th>
           <th>Diárias</th>
+          <th>Status</th>
           <th>Valor Diarias</th>
           <th>Valor Comanda</th>
+          <th>Valor Total</th>
         </tr>
-        <!--                
-                  <tr>
-                    <th><input type="text" id="txtColuna1"/></th>
-                    <th><input type="text" id="txtColuna2"/></th>
-                    <th><input type="text" id="txtColuna3"/></th>
-                  </tr>
-                                -->
       </thead>
       <tbody>
         {% for item in hospedados %}
           <tr>
-            <td>{{ item.numero_quarto }}</td>
-            <td>{{ item.status }}</td>
-            <td>{{ item.nome_hospede }}</td>
-            <td>{{ item.data_entrada }}</td>
-            <td>{{ item.data_saida }}</td>
-            <td>{{ item.diarias }}</td>
-            <td>{{ item.valor_quarto }}</td>
-            <td>{{ item.valor_comanda }}</td>
+            <td>{{ item.reserva.quarto.numero }}</td>
+            <td>{{ item.hospede.nome }}</td>
+            <td>{{ item.reserva.data_entrada }}</td>
+            <td>{{ item.reserva.data_saida }}</td>
+            <td>{{ item.reserva.diarias }}</td>
+            <td>"item.reserva.status"</td>
+            <td>{{ item.reserva.valor}}</td>
+            <td>"item.comanda.valor_comanda"</td>
+            <td>"item.valortotal"</td>
           </tr>
         {% endfor %}
       </tbody>

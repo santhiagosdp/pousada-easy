@@ -19,6 +19,7 @@ urlpatterns = [
     path('', views.home, name='home'), #HOME
 
     path('reservar', views.reservar, name='reservar'),
+    #path('reservando_dados/<id>', views.reservando_dados, name='reservando_dados'),
     path('disponibilidade', views.disponibilidade, name='disponibilidade'),
 
 

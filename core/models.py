@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.postgres.fields import ArrayField
 
 
 class Hospedado(models.Model):
@@ -69,15 +70,26 @@ class Reserva (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateField(default=timezone.now)
     quarto = models.ForeignKey(Quarto, on_delete=models.PROTECT)
+    habilitado = models.BooleanField(default=True)
     data_entrada = models.DateField(blank=True, null=False)
     data_saida = models.DateField(blank=True, null=False)
     diarias = models.IntegerField()
     valor = models.FloatField()
 
+class Reserva_pendente (models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    data_criacao = models.DateField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
+    data_entrada = models.DateField(blank=True, null=False)
+    quantidade_hospedes = models.IntegerField(default=0)
+    data_saida = models.DateField(blank=True, null=False)
+    diarias = models.IntegerField(default = 0, blank=True, null=False)
+    
 
 
 class Hospedes_reserva(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    habilitado = models.BooleanField(default=True)
     data_criacao = models.DateTimeField(default=timezone.now)
     reserva = models.ForeignKey(Reserva, on_delete=models.PROTECT)
     hospede = models.ForeignKey(Hospede, on_delete=models.PROTECT)
