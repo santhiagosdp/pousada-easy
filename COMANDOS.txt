@@ -6,7 +6,7 @@ venv/Scripts/Activate
 
 ##### Instalando e configurando Django
 python.exe -m pip install --upgrade pip
-pip indtall django
+pip install django
 
 #### Criando o Projeto na mesma pasta
 django-admin.exe startproject pousadaeasy .   #### Observe que tem o ponto no final. 
@@ -23,6 +23,8 @@ python manage.py startapp core  ####primeira Aplicação
     INSTALLED_APPS = [ ...  'blog']
 
 python manage.py createsuperuser
+
+
 
 
 
