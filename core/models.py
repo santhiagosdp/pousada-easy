@@ -104,8 +104,10 @@ class Produto (models.Model):
     data_criacao = models.DateTimeField(default=timezone.now)
     habilitado = models.BooleanField(default=True)
     nome = models.CharField(max_length=200)
-    valor = models.FloatField()
+    valor_venda = models.FloatField(default=0)
+    valor_custo = models.FloatField(default=0)
     descricao = models.CharField(max_length=200)
+
 
 
 

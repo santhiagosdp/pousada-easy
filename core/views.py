@@ -119,6 +119,52 @@ def quartos(request):
 
 
 @login_required
+def produtos(request):    
+    ##CADASTRO DE QUARTO POST
+    if request.method == 'POST':   
+        produto_cad = Produto.objects.create(
+                usuario = request.user,
+                nome = request.POST.get("nome").upper(),
+                descricao = request.POST.get("descricao").upper(),
+                valor_custo = request.POST.get("valor_custo"),
+                valor_venda = request.POST.get("valor_venda")
+        )
+        produto_cad.save
+
+        return redirect('produtos') 
+    #####  FIM DO CADASTRO DO QUARTO
+
+
+    produtos = Produto.objects.filter(habilitado = True, usuario=request.user).order_by('nome')
+
+    ## botão de buscar hospede get
+    buscar = request.GET.get('search')
+    if buscar:
+        produtos = Produto.objects.filter(habilitado = True, usuario=request.user, nome__icontains = buscar).order_by('nome')
+    ####### FIM DO BUSCAR
+
+    return render(request, 'core/produtos.html', {'titulo':'Produtos', 'produtos':produtos})
+
+
+@login_required
+def comandas(request):
+   
+    hospedados = Hospedes_reserva.objects.filter(usuario = request.user)
+    aux = []
+    hoje = date.today() # checkin tem que ser antes e checkout depois
+    for item in hospedados:
+        if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje:
+            aux.append(item)
+            print (item)
+
+    hospedados = aux
+    return render(request, 'core/comandas.html', {'titulo':'Comandas', 'hospedados': hospedados })
+
+
+
+
+
+@login_required
 def cliente_delete(request, id):
     desabilitar = Hospede.objects.get(id=id)
     desabilitar.habilitado = False
@@ -131,6 +177,13 @@ def quarto_delete(request, id):
     desabilitar.habilitado = False
     desabilitar.save()
     return redirect('quartos')
+
+@login_required
+def produto_delete(request, id):
+    desabilitar = Produto.objects.get(id=id)
+    desabilitar.habilitado = False
+    desabilitar.save()
+    return redirect('produtos')
 
 
 @login_required
@@ -347,7 +400,7 @@ def disponibilidade(request):
     for item in hospedados:
         for comanda in comandas: 
             if comanda.hospedes_reserva == item:
-                item.valor_comanda = item.valor_comanda+comanda.produto.valor
+                item.valor_comanda = item.valor_comanda+comanda.produto.valor_venda
         item.valor_total = item.reserva.valor + item.valor_comanda
     
 

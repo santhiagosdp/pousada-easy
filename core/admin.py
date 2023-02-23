@@ -14,7 +14,7 @@ class HospedeAdmin(admin.ModelAdmin):
 admin.site.register(Hospede, HospedeAdmin),
 
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ("data_criacao", "nome", "valor", "descricao", )
+    list_display = ("data_criacao", "nome", "valor_custo", "valor_venda", "descricao", )
 admin.site.register(Produto, ProdutoAdmin),
 
 class Comanda_consumoAdmin(admin.ModelAdmin):
