@@ -14,19 +14,19 @@
 
       <div class="col-md-6">
         <label for="hospede" class="form-label">Nome do Hospede</label>
-        <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" />
+        <input name="hospede" type="text" class="form-control" id="hospede"  aria-describedby="hospede" disabled />
         <div id="hospede" class="form-text"></div>
       </div>
 
       <div class="col-auto">
         <label for="check-in" class="form-label">Data de check-in</label>
-        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" />
+        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled />
         <div id="check-in" class="form-text"></div>
       </div>
 
       <div class="col-auto">
         <label for="check-out" class="form-label">Data de check-out</label>
-        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" />
+        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
         <div id="check-out" class="form-text"></div>
       </div>
 
@@ -69,13 +69,18 @@
             <td>{{ item.reserva.data_entrada }}</td>
             <td>{{ item.reserva.data_saida }}</td>
             <td>{{ item.reserva.diarias }}</td>
-            <td>"item.reserva.status"</td>
+            <td>{{item.status}}</td>
             <td>{{ item.reserva.valor}}</td>
-            <td>"item.comanda.valor_comanda"</td>
-            <td>"item.valortotal"</td>
+            <td>{{item.valor_comanda}}</td>
+            <td>{{item.valor_total}}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+  
+
 {% endblock %}
+
+
+

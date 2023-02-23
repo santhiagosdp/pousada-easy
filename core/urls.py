@@ -13,6 +13,9 @@ urlpatterns = [
     path('quartos/', views.quartos, name='quartos'),
     path('quarto/delete/<id>', views.quarto_delete, name='quarto_delete'),
 
+    #path('produtos/', views.produtos, name='produtos'),
+    #path('produto/delete/<id>', views.produto_delete, name='produto_delete'),
+
 
     path('accounts/', include('django.contrib.auth.urls')), #LOGIN
     path('accounts/logout', views.logout_view, name='logout'), #LOGOUT
@@ -22,6 +25,8 @@ urlpatterns = [
     #path('reservando_dados/<id>', views.reservando_dados, name='reservando_dados'),
     path('disponibilidade', views.disponibilidade, name='disponibilidade'),
 
+
+    path('<path:unknown_path>', views.home),
 
     
 

@@ -10,6 +10,12 @@ from .models import Hospedado, Quarto, Hospede,Endereco,Reserva,Hospedes_reserva
 # Create your views here.
 
 
+
+
+
+
+
+
 def cadastrar_usuario(request):
     if request.method == "POST":
         form_usuario = UserCreationForm(request.POST)
@@ -21,9 +27,12 @@ def cadastrar_usuario(request):
     return render(request, 'core/cadastro.html', {'form_usuario': form_usuario})
 
 @login_required
-def home(request):
-    #HOMEEEEE
-
+def home(request, unknown_path=None):
+    if unknown_path is not None:
+        # Redireciona o usuário para a página inicial se a URL não existe
+        return redirect('home')
+    
+    
     return render(request, 'core/home.html', {'titulo':'Home'})
 
 
@@ -186,83 +195,87 @@ def reservar(request):
 
     else:
         if checkin and checkout and quantidade_hospedes:
-            #apaga as reservas não resolvidas
-            pendente = Reserva_pendente.objects.filter(usuario=request.user)
-            pendente.delete()
-            #########
-
             checkin = datetime.strptime(checkin, "%Y-%m-%d")
             checkout = datetime.strptime(checkout, "%Y-%m-%d")
             quantidade_hospedes = int(quantidade_hospedes)
-
-            quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero') #__icontains
             
-            #SEPARAR QUARTOS QUE TEM CAPACIDADE PARA OS HOSPEDES
-            for quarto in quartos: 
-                if quarto.capacidade >= quantidade_hospedes:
-                    quartos_disponiveis.append(quarto)
-                    print(quartos_disponiveis)
-                    print("quartos_disponiveis ##########################")
-            ##########
+            #if data checkin menor que checkout
+            if checkin < checkout:
+                #apaga as reservas não resolvidas
+                pendente = Reserva_pendente.objects.filter(usuario=request.user)
+                pendente.delete()
+                #########
 
-            ##DEFINIR ARRAY DE DATAS DA RESERVA_A_CONFIRMAR
-            datas_check = [] ## datas da reserva que esta em andamento
-            data = checkin
-            diarias = 0
-            while data < checkout:
-                datas_check.append(data)
-                diarias = diarias+1
-                data = data+timedelta(1)
-            
-            print(datas_check)
-            print("datas_check ##########################")
-            #print ('#################### APÓS WHILE')    
-            #print(datas_reserva)
-            ###############
-
-            #### 
-            reservas = Reserva.objects.filter(usuario=request.user).order_by('data_entrada') #habilitado = True
-            for reserva in reservas:
-                reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
-                reserva.data_saida = datetime.strptime(str(reserva.data_saida), "%Y-%m-%d")
-                datas_reserva = []  ## datas da reserva confirmada object
-                data = reserva.data_entrada
-                while data < reserva.data_saida:
-                    datas_reserva.append(data)
-                    data = data+timedelta(1)
-                print(datas_reserva)
-                print("datas_reserva ##########################")
                 
-                for data in datas_check:
-                    for data2 in datas_reserva: 
-                        if  data == data2:
-                            quartos_reservados.append(reserva.quarto)
-                            break
-                        #if
+
+                quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero') #__icontains
+                
+                #SEPARAR QUARTOS QUE TEM CAPACIDADE PARA OS HOSPEDES
+                for quarto in quartos: 
+                    if quarto.capacidade >= quantidade_hospedes:
+                        quartos_disponiveis.append(quarto)
+                        print(quartos_disponiveis)
+                        print("quartos_disponiveis ##########################")
+                ##########
+
+                ##DEFINIR ARRAY DE DATAS DA RESERVA_A_CONFIRMAR
+                datas_check = [] ## datas da reserva que esta em andamento
+                data = checkin
+                diarias = 0
+                while data < checkout:
+                    datas_check.append(data)
+                    diarias = diarias+1
+                    data = data+timedelta(1)
+                
+                print(datas_check)
+                print("datas_check ##########################")
+                #print ('#################### APÓS WHILE')    
+                #print(datas_reserva)
+                ###############
+
+                #### 
+                reservas = Reserva.objects.filter(usuario=request.user).order_by('data_entrada') #habilitado = True
+                for reserva in reservas:
+                    reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
+                    reserva.data_saida = datetime.strptime(str(reserva.data_saida), "%Y-%m-%d")
+                    datas_reserva = []  ## datas da reserva confirmada object
+                    data = reserva.data_entrada
+                    while data < reserva.data_saida:
+                        datas_reserva.append(data)
+                        data = data+timedelta(1)
+                    print(datas_reserva)
+                    print("datas_reserva ##########################")
+                    
+                    for data in datas_check:
+                        for data2 in datas_reserva: 
+                            if  data == data2:
+                                quartos_reservados.append(reserva.quarto)
+                                break
+                            #if
+                        #for
                     #for
-                #for
-                print(quartos_reservados)
-                print("quartos_reservados ##########################")
+                    print(quartos_reservados)
+                    print("quartos_reservados ##########################")
 
-            ## tenho QUARTOS.RESERVADOS e QUARTOS_DISPONIVEIS. 
-            ##  FAZER A CONCILIAÇÃO PARA TIRAR OS QUARTOS RESERVADOS DO ARRAY DE QUARTOS DISPONIVEIS
-            quartos_final = []
-            for quarto1 in quartos_disponiveis:
-                reservado = False
-                for quarto2 in quartos_reservados:
-                    if quarto1 == quarto2:
-                        reservado = True
-                if reservado == False:
-                    quartos_final.append(quarto1)
+                ## tenho QUARTOS.RESERVADOS e QUARTOS_DISPONIVEIS. 
+                ##  FAZER A CONCILIAÇÃO PARA TIRAR OS QUARTOS RESERVADOS DO ARRAY DE QUARTOS DISPONIVEIS
+                quartos_final = []
+                for quarto1 in quartos_disponiveis:
+                    reservado = False
+                    for quarto2 in quartos_reservados:
+                        if quarto1 == quarto2:
+                            reservado = True
+                    if reservado == False:
+                        quartos_final.append(quarto1)
 
-            print(quartos_final)
-            print("quartos_final ##########################")
-        ####### FIM DO BUSCAR
-            quartos_disponiveis = quartos_final
-            ############## criar_reserva_pendente()
-            res_pendente = Reserva_pendente.objects.create(usuario=request.user, data_entrada=checkin, data_saida=checkout, quantidade_hospedes=quantidade_hospedes, diarias = diarias)
-            res_pendente.save()
-            ######### fim criar reserva pendente
+                print(quartos_final)
+                print("quartos_final ##########################")
+            ####### FIM DO BUSCAR
+                quartos_disponiveis = quartos_final
+                ############## criar_reserva_pendente()
+                res_pendente = Reserva_pendente.objects.create(usuario=request.user, data_entrada=checkin, data_saida=checkout, quantidade_hospedes=quantidade_hospedes, diarias = diarias)
+                res_pendente.save()
+                ######### fim criar reserva pendente
 
         else: 
             if id_quarto:  # GET QUARTO 
@@ -300,18 +313,22 @@ def disponibilidade(request):
     checkin = request.GET.get('checkin')  #'2023-02-25 00:00:00+00:00'
     checkout =request.GET.get('checkout')
 
-    if quarto or hospede:# or checkin or checkout: 
+    if quarto:# or checkin or checkout: 
         hospedados = Hospedes_reserva.objects.filter(usuario=request.user)
-        quarto_pesq = Quarto.objects.filter(usuario = request.user, numero_quarto__icontains = quarto)
-        hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
-        
-        #for item in hospedados: 
-            ## logica para ver quem tem os requisitos
+        quarto_pesq = Quarto.objects.filter(usuario = request.user, numero__icontains = quarto)
+        #hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
+        pesquisa = []
+        for item in hospedados:
+            for quarto in quarto_pesq:
+                if item.reserva.quarto == quarto:
+                    pesquisa.append(item)
+        hospedados = pesquisa
+
+    #ordenar por checkin
     ordenado = []
     ajuda = ""
     inicio = 0
     for item in hospedados:
-        #ordenar por checkin
         inicio = 1+inicio
         ajuda = item
         for item2 in hospedados:
@@ -322,9 +339,16 @@ def disponibilidade(request):
         item.reserva.data_entrada = '{}/{}/{}'.format(item.reserva.data_entrada.day, item.reserva.data_entrada.month,item.reserva.data_entrada.year)
         item.reserva.data_saida = '{}/{}/{}'.format(item.reserva.data_saida.day, item.reserva.data_saida.month,item.reserva.data_saida.year)
         item.reserva.data_criacao = '{}/{}/{}'.format(item.reserva.data_criacao.day, item.reserva.data_criacao.month,item.reserva.data_criacao.year)       
-
+    ######
     hospedados = ordenado
-
+    
+    ## Definir Valores de comanda e total
+    comandas = Comanda_consumo.objects.filter(usuario = request.user)
+    for item in hospedados:
+        for comanda in comandas: 
+            if comanda.hospedes_reserva == item:
+                item.valor_comanda = item.valor_comanda+comanda.produto.valor
+        item.valor_total = item.reserva.valor + item.valor_comanda
     
 
     return render(request, 'core/disponibilidade.html', {'titulo':'Reservas Feitas', 'hospedados':hospedados})

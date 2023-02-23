@@ -1,5 +1,60 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-  <h1>Você está na página HOME</h1>
+  <h1>Página em Desenvolvimento</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <div  class="card">
+      <label align="center">Reservar quarto</label>
+      <br>
+      <a href="{% url 'reservar'%}">
+        <img src="https://blog.hotelb2c.com.br/wp-content/uploads/2020/07/Reserva_Direta_Blog_HotelB2C_Revenue_management-1024x630.jpg" alt="Imagem de exemplo">
+        <!--<h3>Reservar Quarto</h3>
+        <p>Buscar quartos para Reserva</p>-->
+      </a>
+  </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">  
+      <label align="center">Ver Reservas Agendadas</label>
+      <br>
+    <a href="{% url 'disponibilidade' %}">
+        <img src="data:image/jpeg;base64,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" alt="Imagem de exemplo">
+        <!--<h3>Reservar Quarto</h3>
+        <p>Buscar quartos para Reserva</p>-->
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  .card {
+    width: 300px;
+		height: 200px;
+		background-color: lightblue;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 16px;
+  }
+  
+  .card img {
+    width: 250px;
+		height: 100px;
+    border-radius: 5px 5px 0 0;
+  }
+  
+  .card h3 {
+    font-size: 1.5em;
+    margin-top: 0;
+  }
+  
+  .card p {
+    font-size: 1.2em;
+    color: #555;
+  }
+</style>
+  
 {% endblock %}

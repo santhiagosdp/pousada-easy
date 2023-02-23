@@ -93,6 +93,9 @@ class Hospedes_reserva(models.Model):
     data_criacao = models.DateTimeField(default=timezone.now)
     reserva = models.ForeignKey(Reserva, on_delete=models.PROTECT)
     hospede = models.ForeignKey(Hospede, on_delete=models.PROTECT)
+    status = models.CharField(max_length=200, default="Em Aberto")
+    valor_comanda = models.IntegerField(default=0)
+    valor_total = models.IntegerField(default=0)
     
 
 
