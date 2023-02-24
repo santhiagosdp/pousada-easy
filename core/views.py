@@ -154,7 +154,7 @@ def comandas(request):
     for item in hospedados:
         if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje:
             aux.append(item)
-            print (item)
+            #print (item)
 
     hospedados = aux
     return render(request, 'core/comandas.html', {'titulo':'Comandas', 'hospedados': hospedados })
