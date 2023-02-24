@@ -47,18 +47,19 @@
   <br />
 
   <div class="row">
-    <table class="table table-striped">
+    <table class="table table-striped" id="tabela-produtos">
       <thead>
         <tr>
-          <th>Quarto</th>
-          <th>Hospede</th>
-          <th>Check-in</th>
-          <th>Check-out</th>
-          <th>Diárias</th>
-          <th>Status</th>
-          <th>Valor Diarias</th>
-          <th>Valor Comanda</th>
-          <th>Valor Total</th>
+          <th class="ordenavel">Quarto</th>
+          <th class="ordenavel">Hospede</th>
+          <th class="ordenavel">Check-in</th>
+          <th class="ordenavel">Check-out</th>
+          <th class="ordenavel">Diárias</th>
+          <th class="ordenavel">Status</th>
+          <th class="ordenavel">Valor Diarias</th>
+          <th class="ordenavel">Valor Comanda</th>
+          <th class="ordenavel">Valor Total</th>
+          <th >#</th>
         </tr>
       </thead>
       <tbody>
@@ -73,12 +74,19 @@
             <td>{{ item.reserva.valor}}</td>
             <td>{{item.valor_comanda}}</td>
             <td>{{item.valor_total}}</td>
+            <td>
+              <a type="button" class="far fa-trash-alt" href="/hospedagem/delete/{{item.id}}" style="font-size:20px; color:#FF0000"></a>
+          </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+
   
+
+  
+
 
 {% endblock %}
 

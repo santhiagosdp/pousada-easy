@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 class Hospedado(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     nome_hospede = models.CharField(max_length=200)
+    habilitado = models.BooleanField(default=True)
     status = models.CharField(max_length=200, default='reservado')
     numero_quarto = models.CharField(max_length=200)
     valor_quarto = models.FloatField()
@@ -41,6 +42,7 @@ class Quarto(models.Model):
 class Endereco (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
     cep = models.CharField(max_length=200)
     rua = models.CharField(max_length=200)
     complemento = models.CharField(max_length=200)
@@ -74,7 +76,7 @@ class Reserva (models.Model):
     data_entrada = models.DateField(blank=True, null=False)
     data_saida = models.DateField(blank=True, null=False)
     diarias = models.IntegerField()
-    valor = models.FloatField()
+    valor = models.FloatField(default=0)
 
 class Reserva_pendente (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
@@ -94,8 +96,8 @@ class Hospedes_reserva(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.PROTECT)
     hospede = models.ForeignKey(Hospede, on_delete=models.PROTECT)
     status = models.CharField(max_length=200, default="Em Aberto")
-    valor_comanda = models.IntegerField(default=0)
-    valor_total = models.IntegerField(default=0)
+    valor_comanda = models.FloatField(default=0)
+    valor_total = models.FloatField(default=0)
     
 
 
@@ -114,6 +116,7 @@ class Produto (models.Model):
 class Comanda_consumo(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
     hospedes_reserva = models.ForeignKey(Hospedes_reserva, on_delete=models.PROTECT)
     produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
 
@@ -121,6 +124,7 @@ class Comanda_consumo(models.Model):
 class Fechamento_conta (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
+    habilitado = models.BooleanField(default=True)
     hospedes_reserva = models.ForeignKey(Hospedes_reserva, on_delete=models.PROTECT)
     pago = models.BooleanField(default=False)
     valor_consumo = models.FloatField()

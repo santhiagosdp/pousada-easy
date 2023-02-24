@@ -126,8 +126,8 @@ def produtos(request):
                 usuario = request.user,
                 nome = request.POST.get("nome").upper(),
                 descricao = request.POST.get("descricao").upper(),
-                valor_custo = request.POST.get("valor_custo"),
-                valor_venda = request.POST.get("valor_venda")
+                valor_custo = request.POST.get("valor_custo").replace(",", "."),
+                valor_venda = request.POST.get("valor_venda").replace(",", ".")
         )
         produto_cad.save
 
@@ -148,7 +148,6 @@ def produtos(request):
 
 @login_required
 def comandas(request):
-   
     hospedados = Hospedes_reserva.objects.filter(usuario = request.user)
     aux = []
     hoje = date.today() # checkin tem que ser antes e checkout depois
@@ -185,6 +184,32 @@ def produto_delete(request, id):
     desabilitar.save()
     return redirect('produtos')
 
+@login_required
+def hospedagem_delete(request, id):
+
+    #Deletando Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    hospede_reserva.habilitado = False
+    hospede_reserva.save()
+
+    #Deletando Reserva
+    Reserva = hospede_reserva.reserva
+    Reserva.habilitado = False
+    Reserva.save()
+
+    #deletando as comandas 
+    desabilitar = Comanda_consumo.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
+    for comanda in desabilitar: 
+        comanda.habilitado = False
+        comanda.save()
+    # deletando os fechamento_conta
+    desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
+    for fechamento in desabilitar: 
+        fechamento.habilitado = False
+        fechamento.save()
+    
+    return redirect('disponibilidade')
+
 
 @login_required
 def reservar(request):
@@ -203,8 +228,10 @@ def reservar(request):
 
 
     if request.method == 'POST':    #### cadastrar a reserva confirmada
-        print("METODO POST")
-        print("#########################POST")
+        #print("METODO POST")
+        #print("#########################POST")
+        #print(request.POST.get("valortotal"))
+        #print(float(request.POST.get("valortotal")))
 
 
         pendente = Reserva_pendente.objects.get(
@@ -212,17 +239,18 @@ def reservar(request):
             )
         quarto = Quarto.objects.get(
             id = request.POST.get("id_quarto"),
-            usuario = request.user
+            usuario = request.user,
         )
-        ## criando reserva confirmada       
+        ## criando reserva confirmada   
         reserva = Reserva.objects.create(
             usuario = request.user,
             quarto = quarto,
             data_entrada =pendente.data_entrada,
             data_saida = pendente.data_saida,
             diarias = pendente.diarias,
-            valor = float(request.POST.get("valortotal"))
+            valor = float(request.POST.get("valortotal").replace(",", "."))
             )   
+        print(reserva)
         reserva.save()
         
         hospede = Hospede.objects.get(
@@ -257,9 +285,7 @@ def reservar(request):
                 #apaga as reservas não resolvidas
                 pendente = Reserva_pendente.objects.filter(usuario=request.user)
                 pendente.delete()
-                #########
-
-                
+                #########               
 
                 quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero') #__icontains
                 
@@ -280,14 +306,14 @@ def reservar(request):
                     diarias = diarias+1
                     data = data+timedelta(1)
                 
-                print(datas_check)
-                print("datas_check ##########################")
+                #print(datas_check)
+                #print("datas_check ##########################")
                 #print ('#################### APÓS WHILE')    
                 #print(datas_reserva)
                 ###############
 
                 #### 
-                reservas = Reserva.objects.filter(usuario=request.user).order_by('data_entrada') #habilitado = True
+                reservas = Reserva.objects.filter(habilitado = True, usuario=request.user).order_by('data_entrada')
                 for reserva in reservas:
                     reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
                     reserva.data_saida = datetime.strptime(str(reserva.data_saida), "%Y-%m-%d")
@@ -326,20 +352,24 @@ def reservar(request):
             ####### FIM DO BUSCAR
                 quartos_disponiveis = quartos_final
                 ############## criar_reserva_pendente()
-                res_pendente = Reserva_pendente.objects.create(usuario=request.user, data_entrada=checkin, data_saida=checkout, quantidade_hospedes=quantidade_hospedes, diarias = diarias)
+                res_pendente = Reserva_pendente.objects.create(
+                    usuario=request.user,
+                    data_entrada=checkin,
+                    data_saida=checkout,
+                    quantidade_hospedes=quantidade_hospedes,
+                    diarias = diarias
+                )
                 res_pendente.save()
                 ######### fim criar reserva pendente
 
         else: 
             if id_quarto:  # GET QUARTO 
             
-
-                return render(request, 'core/reservar.html', {'clientes':clientes, 'titulo':"Reservar Quarto", "pagina":"dados_reserva"})   
-    
-    return render(request, 'core/reservar.html', { "clientes":clientes,'titulo':"Reservar Quarto", 'quartos':quartos_disponiveis, "pagina":"quartos","pendente":res_pendente})
-
-    
-
+                context = {'clientes':clientes, 'titulo':"Reservar Quarto", "pagina":"dados_reserva"}
+                return render(request, 'core/reservar.html', context)   
+            
+    context = { "clientes":clientes,'titulo':"Reservar Quarto", 'quartos':quartos_disponiveis, "pagina":"quartos","pendente":res_pendente}
+    return render(request, 'core/reservar.html', context)
 
 
 @login_required
@@ -353,7 +383,7 @@ def logout_view(request):
 def disponibilidade(request):
     #hospedados = Hospedado.objects.filter(usuario=request.user).order_by('data_entrada')
 
-    hospedados = Hospedes_reserva.objects.filter(usuario = request.user)
+    hospedados = Hospedes_reserva.objects.filter(usuario = request.user, habilitado = True)
 
     #quarto = ""
     #hospede = ""
@@ -367,8 +397,8 @@ def disponibilidade(request):
     checkout =request.GET.get('checkout')
 
     if quarto:# or checkin or checkout: 
-        hospedados = Hospedes_reserva.objects.filter(usuario=request.user)
-        quarto_pesq = Quarto.objects.filter(usuario = request.user, numero__icontains = quarto)
+        hospedados = Hospedes_reserva.objects.filter(habilitado = True, usuario=request.user)
+        quarto_pesq = Quarto.objects.filter(habilitado = True, usuario = request.user, numero__icontains = quarto)
         #hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
         pesquisa = []
         for item in hospedados:
@@ -380,9 +410,7 @@ def disponibilidade(request):
     #ordenar por checkin
     ordenado = []
     ajuda = ""
-    inicio = 0
     for item in hospedados:
-        inicio = 1+inicio
         ajuda = item
         for item2 in hospedados:
             if str(item2.reserva.data_entrada) <= str(ajuda.reserva.data_entrada):
@@ -393,10 +421,10 @@ def disponibilidade(request):
         item.reserva.data_saida = '{}/{}/{}'.format(item.reserva.data_saida.day, item.reserva.data_saida.month,item.reserva.data_saida.year)
         item.reserva.data_criacao = '{}/{}/{}'.format(item.reserva.data_criacao.day, item.reserva.data_criacao.month,item.reserva.data_criacao.year)       
     ######
-    hospedados = ordenado
+   #hospedados = ordenado
     
     ## Definir Valores de comanda e total
-    comandas = Comanda_consumo.objects.filter(usuario = request.user)
+    comandas = Comanda_consumo.objects.filter(habilitado = True, usuario = request.user)
     for item in hospedados:
         for comanda in comandas: 
             if comanda.hospedes_reserva == item:
