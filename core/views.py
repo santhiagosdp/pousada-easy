@@ -248,11 +248,13 @@ def comanda_produto_delete(request, idcomandaconsumo, idhospede):
 def hospedagem_checkin(request, id):
     #CHECKIN DO Hospede_Reserva
     hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
-    hospede_reserva.status = 'CHECK-IN OK'
+    if hospede_reserva.status != "CHECK-IN":
+        hospede_reserva.status = 'CHECK-IN'
+    else:
+        hospede_reserva.status = 'EM ABERTO'
     hospede_reserva.save()
 
     return redirect('disponibilidade')
-
 
 @login_required
 def hospedagem_delete(request, id):
@@ -260,7 +262,7 @@ def hospedagem_delete(request, id):
     #Deletando Hospede_Reserva
     hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
     hospede_reserva.habilitado = False
-    hospede_reserva.status = 'FECHADO'
+    hospede_reserva.status = 'DELETADO'
     hospede_reserva.save()
 
     #Deletando Reserva
@@ -284,10 +286,9 @@ def hospedagem_delete(request, id):
 
 @login_required
 def hospedagem_concluir(request, id):
-
     #concluindo Hospede_Reserva
     hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
-    hospede_reserva.status = 'CONCLUIDO'
+    hospede_reserva.status = 'CHECK-OUT'
     hospede_reserva.save()
 
     #Deletando Reserva
@@ -403,14 +404,7 @@ def reservar(request):
                     datas_check.append(data)
                     diarias = diarias+1
                     data = data+timedelta(1)
-                
-                #print(datas_check)
-                #print("datas_check ##########################")
-                #print ('#################### APÓS WHILE')    
-                #print(datas_reserva)
-                ###############
 
-                #### 
                 reservas = Reserva.objects.filter(habilitado = True, usuario=request.user).order_by('data_entrada')
                 for reserva in reservas:
                     reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
@@ -479,23 +473,19 @@ def logout_view(request):
 
 @login_required
 def disponibilidade(request):
-    #hospedados = Hospedado.objects.filter(usuario=request.user).order_by('data_entrada')
-
     hospedados = Hospedes_reserva.objects.filter(usuario = request.user, habilitado = True)
-
-    #quarto = ""
-    #hospede = ""
-    #reserva = ""
-    #comanda = "" implentar ainda
-
+    aux = []
+    for item in hospedados:
+        if item.status != "CHECK-OUT":
+            aux.append(item)
+    hospedados = aux
     #######GET DE PESQUISAR FILTRAR
     quarto = request.GET.get('quarto')
     hospede = request.GET.get('hospede')
     checkin = request.GET.get('checkin')  #'2023-02-25 00:00:00+00:00'
     checkout =request.GET.get('checkout')
 
-    if quarto:# or checkin or checkout: 
-        hospedados = Hospedes_reserva.objects.filter(habilitado = True, usuario=request.user)
+    if quarto:# or checkin or checkout:
         quarto_pesq = Quarto.objects.filter(habilitado = True, usuario = request.user, numero__icontains = quarto)
         #hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
         pesquisa = []
@@ -505,31 +495,29 @@ def disponibilidade(request):
                     pesquisa.append(item)
         hospedados = pesquisa
 
-    #ordenar por checkin
-    ordenado = []
-    ajuda = ""
-    for item in hospedados:
-        ajuda = item
-        for item2 in hospedados:
-            if str(item2.reserva.data_entrada) <= str(ajuda.reserva.data_entrada):
-                ajuda = item2
-        ordenado.append(ajuda)
+    #Se clicar em concluidos
+    status = request.GET.get('status')
+    if status: # == concluidos
+        hospedados = Hospedes_reserva.objects.filter(habilitado = True, usuario=request.user, status="CHECK-OUT")
 
-        item.reserva.data_entrada = '{}/{}/{}'.format(item.reserva.data_entrada.day, item.reserva.data_entrada.month,item.reserva.data_entrada.year)
-        item.reserva.data_saida = '{}/{}/{}'.format(item.reserva.data_saida.day, item.reserva.data_saida.month,item.reserva.data_saida.year)
-        item.reserva.data_criacao = '{}/{}/{}'.format(item.reserva.data_criacao.day, item.reserva.data_criacao.month,item.reserva.data_criacao.year)       
-    ######
-   #hospedados = ordenado
-    
     ## Definir Valores de comanda e total
     comandas = Comanda_consumo.objects.filter(habilitado = True, usuario = request.user)
     for item in hospedados:
+        item.reserva.data_saida = item.reserva.data_saida.strftime('%Y/%m/%d')
+        item.reserva.data_entrada = item.reserva.data_entrada.strftime('%Y/%m/%d')
+        item.reserva.data_criacao = item.reserva.data_criacao.strftime('%Y/%m/%d')
         for comanda in comandas: 
             if comanda.hospedes_reserva == item:
                 item.valor_comanda = item.valor_comanda+comanda.produto.valor_venda
         item.valor_total = item.reserva.valor + item.valor_comanda
-    
 
-    return render(request, 'core/disponibilidade.html', {'titulo':'Reservas Feitas', 'hospedados':hospedados})
+
+    #ordenando pela data de entrada checkin
+    hospedados = sorted(hospedados, key=lambda x: x.reserva.data_entrada)
+    context = {'titulo' : 'Reservas Feitas',
+               'hospedados' : hospedados,
+               'hoje': datetime.now().strftime('%Y/%m/%d')
+               }
+    return render(request, 'core/disponibilidade.html', context)
 
 

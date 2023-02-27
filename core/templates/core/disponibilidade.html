@@ -3,6 +3,34 @@
 
 
 {% block content %}
+
+<style>
+  .botao2 {
+    background-color: blue;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+  .botao-lixo{
+    background-color: red;
+    color: white;
+    padding: 8px 8px;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+}
+.botao-ok{
+    background-color: blue;
+    color: white;
+    padding: 5px 5px;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+}
+
+</style>
+
+
   <h1 class="titulo_centro">Reservas</h1>
 
   <form method="get" id="search-form" class="form-inline">
@@ -11,13 +39,13 @@
       <div class="col-md-2">
         <label for="numero_quarto" class="form-label">Número do Quarto</label>
         <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
-        <div id="numero_quarto" class="form-text"></div>
+        <div class="form-text"></div>
       </div>
 
       <div class="col-md-6">
         <label for="hospede" class="form-label">Nome do Hospede</label>
         <input name="hospede" type="text" class="form-control" id="hospede"  aria-describedby="hospede" disabled />
-        <div id="hospede" class="form-text"></div>
+        <div class="form-text"></div>
       </div>
 
       <div class="col-auto">
@@ -31,28 +59,28 @@
         <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
         <div id="check-out" class="form-text"></div>
       </div>
-
-      <!--               <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-          <label class="form-check-label" for="exampleCheck1"></label>
-        </div>              -->
     </div>
-
     <div class="row botao_centro">
-      <div class="col-md-5"></div>
-      <div class="col-auto">
+      <div class="col">
         <button type="submit" class="btn btn-primary">Filtrar</button>
+      </div>
+    </div>
+  </form>
+  <form method="get" id="concluido" class="form-inline">
+    <div class="row text-end">
+      <div class="col">
+        <input name="status" class="form-control" value="concluidos" type="hidden"/>
+        <button type="submit" class="btn btn-success" title="Hospedagens Concluidas" >Concluidos</button>
       </div>
     </div>
   </form>
 
   <br />
-
   <div class="row">
-    <table class="table table-striped" id="tabela-produtos">
+    <table class="table" id="tabela-produtos">
       <thead>
         <tr>
-          <th class="ordenavel">Confirmar</th>
+          <th class="ordenavel">Checkin</th>
           <th class="ordenavel">Quarto</th>
           <th class="ordenavel">Hospede</th>
           <th class="ordenavel">Check-in</th>
@@ -69,33 +97,45 @@
         {% for item in hospedados %}
           <tr>
             <td>
-              <a type="button" class="far fa-trash-alt" href="/hospedagem/checkin/{{item.id}}" style="font-size:20px; color:#06451E">Check-in</a>
+              <a type="button" class="botao-ok" href="/hospedagem/checkin/{{item.id}}" title="Fazer Check-in">Check-in</a>
             </td>
             <td>{{ item.reserva.quarto.numero }}</td>
             <td>{{ item.hospede.nome }}</td>
             <td>{{ item.reserva.data_entrada }}</td>
             <td>{{ item.reserva.data_saida }}</td>
             <td>{{ item.reserva.diarias }}</td>
+
+            <!-- RESERVADOS - SEM COR -->  <!-- SE NÃO TIVER NO DIA DO CHECKIN -->
+            {% if item.reserva.data_entrada > hoje %}
             <td>{{item.status}}</td>
+            {% endif %}
+
+            <!-- HOSPEDADOS - AZUL  -->
+            {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
+            <td style="background-color: LightSteelBlue; color: white">{{item.status}}</td>
+            {% endif %}
+
+              <!-- HOSPEDADOS - SAINDO HOJE - AZUL  -->
+            {% if item.reserva.data_saida == hoje %}
+              <td style="background-color: LightSteelBlue; color: white"> {{item.status}} </td>
+            {% endif %}
+
+            <!-- ENCERRADOS - VERMELHO  -->
+            {% if item.reserva.data_saida < hoje %}
+              <td style="background-color: OrangeRed; color: white" >{{item.status}}</td>
+            {% endif %}
             <td>{{ item.reserva.valor|intcomma}}</td>
             <td>{{item.valor_comanda|intcomma}}</td>
             <td>{{item.valor_total|intcomma}}</td>
             <td>
-              <a type="button" class="far fa-trash-alt" href="/hospedagem/delete/{{item.id}}" style="font-size:20px; color:#FF0000"></a>
-              <label> -- </label>
-              <a type="button" class="far fa-trash-alt" href="/hospedagem/concluir/{{item.id}}" style="font-size:20px; color:#1049E4"></a>
-          </td>
+              <a type="button" class="far fa-trash-alt botao-lixo" href="/hospedagem/delete/{{item.id}}" title="deletar"></a>
+              <a type="button" class="botao-ok" href="/hospedagem/concluir/{{item.id}}" title="Fazer Check-out">Check-out</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
-  
-
-  
-
-
 {% endblock %}
 
 
