@@ -73,6 +73,7 @@ class Reserva (models.Model):
     data_criacao = models.DateField(default=timezone.now)
     quarto = models.ForeignKey(Quarto, on_delete=models.PROTECT)
     habilitado = models.BooleanField(default=True)
+    quantidade_hospedes = models.IntegerField(default=1)
     data_entrada = models.DateField(blank=True, null=False)
     data_saida = models.DateField(blank=True, null=False)
     diarias = models.IntegerField()
@@ -86,7 +87,6 @@ class Reserva_pendente (models.Model):
     quantidade_hospedes = models.IntegerField(default=0)
     data_saida = models.DateField(blank=True, null=False)
     diarias = models.IntegerField(default = 0, blank=True, null=False)
-    
 
 
 class Hospedes_reserva(models.Model):
@@ -95,7 +95,7 @@ class Hospedes_reserva(models.Model):
     data_criacao = models.DateTimeField(default=timezone.now)
     reserva = models.ForeignKey(Reserva, on_delete=models.PROTECT)
     hospede = models.ForeignKey(Hospede, on_delete=models.PROTECT)
-    status = models.CharField(max_length=200, default="Em Aberto")
+    status = models.CharField(max_length=200, default="EM ABERTO")
     valor_comanda = models.FloatField(default=0)
     valor_total = models.FloatField(default=0)
     
@@ -119,7 +119,6 @@ class Comanda_consumo(models.Model):
     habilitado = models.BooleanField(default=True)
     hospedes_reserva = models.ForeignKey(Hospedes_reserva, on_delete=models.PROTECT)
     produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
-
 
 class Fechamento_conta (models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)

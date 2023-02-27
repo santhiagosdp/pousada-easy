@@ -26,8 +26,15 @@ urlpatterns = [
     #path('reservando_dados/<id>', views.reservando_dados, name='reservando_dados'),
     path('disponibilidade', views.disponibilidade, name='disponibilidade'),
     path('hospedagem/delete/<id>', views.hospedagem_delete, name='hospedagem_delete'),
+    path('hospedagem/concluir/<id>', views.hospedagem_concluir, name='hospedagem_concluir'),
+    path('hospedagem/checkin/<id>', views.hospedagem_checkin, name='hospedagem_checkin'),
+
+    
 
     path('comandas/', views.comandas, name='comandas'),
+    path('comanda/hospedagem/<id>', views.itenscomanda, name='itenscomanda'),
+    path('comanda/produto/delete/<idcomandaconsumo>/<idhospede>', views.comanda_produto_delete, name='comanda_produto_delete'),
+
 
 
     

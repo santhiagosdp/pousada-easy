@@ -1,0 +1,140 @@
+{% extends 'base/base.html' %}
+{% load humanize %}
+
+{% block content %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    .container2 {
+      padding: 10px;
+      background-color: #f2f2f2;
+      max-width: auto;
+      margin: auto;
+      border-radius: 5px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    .card {
+      width: 300px;
+      height: 200px;
+      background-color: wheat;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+    }
+    .col-md-3 {
+      padding: 5px;
+    }
+    
+    h3 {
+      text-align: center;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    .titulo {
+      margin-top: 10px;
+    }
+    .form-cor {
+      background-color: #7a8fcabe;
+    }
+  </style>
+  <div class="titulo">
+    <h3>Controle de comanda por Quarto</h3>
+  </div>
+
+  <div class="container2">
+    <div class="row">
+      <div class="col-md-6">
+        <p for="nome">
+          <strong>Nome:</strong> {{ hospede_reserva.hospede.nome }}
+        </p>
+        <p for="email">
+          <strong>E-mail:</strong> {{ hospede_reserva.hospede.email }}
+        </p>
+        <p for="telefone">
+          <strong>Telefone:</strong> {{ hospede_reserva.hospede.telefone }}
+        </p>
+        <p for="quarto">
+          <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }}
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p for="checkin">
+          <strong>Checkin:</strong> {{ hospede_reserva.reserva.data_entrada }}
+        </p>
+        <p for="checkout">
+          <strong>Checkout:</strong> {{ hospede_reserva.reserva.data_saida }}
+        </p>
+        <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
+        <p for="valor_hospedagem">
+          <strong>Valor da Hospedagem:</strong> R${{ hospede_reserva.reserva.valor|intcomma }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container2">
+    <form method="post">
+        {% csrf_token %}
+      <div class="row">
+        <div class="col-sm-5">
+          <select class="form-select form-cor" id="id_produto" name="id_produto" required>
+            <option value="" align="center" disabled selected>Selecione o Produto</option>
+            {% for produto in produtos %}
+              <option value="{{ produto.id }}">{{ produto.nome }} - R${{ produto.valor_venda }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-sm-1">
+          <input class="form-control form-cor" type="number" name="quantidade" id="quantidade" min="0" required />
+        </div>
+        <div class="col-sm-2">
+          <button class="btn btn-primary" type="submit">Adicionar</button>
+        </div>
+
+        <div class="col-sm-4 text-end">
+          <a class="btn btn-success" type="button" href="{% url 'produtos' %}">+Produtos</a>
+        </div>
+      </div>
+    </form>
+  </div><br />
+
+  <div id="linha_horizontal"></div>
+  <div id="linha_horizontal"></div>
+
+  <div class="row">
+    <table class="table table-striped" id="tabela-produtos">
+      <thead>
+        <tr>
+          <th class="ordenavel">Item</th>
+          <th class="ordenavel text-center">Data/Horas</th>
+          <th class="ordenavel">Nome</th>
+          <th class="ordenavel">Descrição</th>
+          <th class="ordenavel text-center">Valor</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for indice, item in produtos_comanda %}
+          <tr>
+            <td>{{indice}}</td>
+            <td class="text-center">{{ item.data_criacao }}</td>
+            <td>{{ item.produto.nome }}</td>
+            <td>{{ item.produto.descricao }}</td>
+            <td class="text-center">{{ item.produto.valor_venda|intcomma }}</td>
+            <td>
+              <a type="button" class="far fa-trash-alt" href="/comanda/produto/delete/{{ item.id }}/{{ hospede_reserva.id }}" style="font-size:20px; color:#FF0000"></a>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td></td><td></td><td></td><td></td>
+          <th class="text-end">Valor Total: R${{valor_comanda|intcomma}}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

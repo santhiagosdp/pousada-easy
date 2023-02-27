@@ -148,19 +148,70 @@ def produtos(request):
 
 @login_required
 def comandas(request):
-    hospedados = Hospedes_reserva.objects.filter(usuario = request.user)
+    hospedados = Hospedes_reserva.objects.filter(usuario = request.user,
+                                                 habilitado = True
+                                                 )
     aux = []
+    abertos = []
     hoje = date.today() # checkin tem que ser antes e checkout depois
     for item in hospedados:
-        if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje:
+        if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje and item.status == "CHECK-IN OK":
             aux.append(item)
             #print (item)
-
+        if item.reserva.data_saida < hoje and item.status == "EM ABERTO":
+            abertos.append(item)
     hospedados = aux
-    return render(request, 'core/comandas.html', {'titulo':'Comandas', 'hospedados': hospedados })
+    context = {'titulo':'Comandas',
+               'hospedados': hospedados,
+               'abertos' : abertos }
+    return render(request, 'core/comandas.html', context)
 
+@login_required
+def itenscomanda(request, id):
 
+    hospede_reserva = Hospedes_reserva.objects.get(id = id,
+                                                   usuario = request.user,
+                                                   habilitado = True
+    )
+    
+    produtos = Produto.objects.filter(habilitado = True,
+                                      usuario = request.user
+    )
+    
+    produtos_comanda = Comanda_consumo.objects.filter(usuario=request.user,
+                                                      habilitado = True,
+                                                      hospedes_reserva = hospede_reserva
+    )
+    
+    if request.method == 'POST':
+        produto = Produto.objects.get(usuario = request.user,
+                                      id=request.POST.get("id_produto"),
+        )
+        quantidade = int(request.POST.get("quantidade"))
+        while quantidade>0:
+            quantidade = quantidade -1
+            produtos_comanda = Comanda_consumo.objects.create(usuario = request.user,
+                                                            hospedes_reserva = hospede_reserva,
+                                                            produto = produto
+            )      
+            produtos_comanda.save
+            print(produto)
 
+        return redirect('/comanda/hospedagem/'+id)
+    
+    valor_comanda = 0
+    for item in produtos_comanda:
+        valor_comanda = valor_comanda + item.produto.valor_venda
+    
+    produtos_comanda_com_indices = [(i+1, p) for i, p in enumerate(produtos_comanda)]
+    context = {'titulo':'Itens da Comanda',
+               'hospede_reserva' : hospede_reserva,
+               "produtos" : produtos,
+               "produtos_comanda" : produtos_comanda_com_indices,
+               "valor_comanda" : valor_comanda
+               }
+    
+    return render(request, 'core/itenscomanda.html', context )
 
 
 @login_required
@@ -185,11 +236,31 @@ def produto_delete(request, id):
     return redirect('produtos')
 
 @login_required
+def comanda_produto_delete(request, idcomandaconsumo, idhospede):
+    desabilitar = Comanda_consumo.objects.get(id=idcomandaconsumo,
+                                              usuario = request.user
+    )
+    desabilitar.habilitado = False
+    desabilitar.save()
+    return redirect('/comanda/hospedagem/'+idhospede)
+
+@login_required
+def hospedagem_checkin(request, id):
+    #CHECKIN DO Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    hospede_reserva.status = 'CHECK-IN OK'
+    hospede_reserva.save()
+
+    return redirect('disponibilidade')
+
+
+@login_required
 def hospedagem_delete(request, id):
 
     #Deletando Hospede_Reserva
     hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
     hospede_reserva.habilitado = False
+    hospede_reserva.status = 'FECHADO'
     hospede_reserva.save()
 
     #Deletando Reserva
@@ -210,6 +281,32 @@ def hospedagem_delete(request, id):
     
     return redirect('disponibilidade')
 
+
+@login_required
+def hospedagem_concluir(request, id):
+
+    #concluindo Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    hospede_reserva.status = 'CONCLUIDO'
+    hospede_reserva.save()
+
+    #Deletando Reserva
+    Reserva = hospede_reserva.reserva
+    Reserva.habilitado = False
+    Reserva.save()
+
+    #deletando as comandas 
+    desabilitar = Comanda_consumo.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
+    for comanda in desabilitar: 
+        comanda.habilitado = False
+        comanda.save()
+    # deletando os fechamento_conta
+    #desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
+    #for fechamento in desabilitar: 
+        #fechamento.habilitado = False
+        #fechamento.save()
+    
+    return redirect('disponibilidade')
 
 @login_required
 def reservar(request):
@@ -245,7 +342,8 @@ def reservar(request):
         reserva = Reserva.objects.create(
             usuario = request.user,
             quarto = quarto,
-            data_entrada =pendente.data_entrada,
+            quantidade_hospedes = pendente.quantidade_hospedes,
+            data_entrada = pendente.data_entrada,
             data_saida = pendente.data_saida,
             diarias = pendente.diarias,
             valor = float(request.POST.get("valortotal").replace(",", "."))

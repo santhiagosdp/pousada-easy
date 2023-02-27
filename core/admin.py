@@ -26,7 +26,7 @@ class Hospedes_reservaAdmin(admin.ModelAdmin):
 admin.site.register(Hospedes_reserva, Hospedes_reservaAdmin),
 
 class ReservaAdmin(admin.ModelAdmin):
-    list_display = ("quarto", "data_entrada", "data_saida","diarias","valor","habilitado", )
+    list_display = ("quarto", "data_entrada", "data_saida","diarias","valor","habilitado",'quantidade_hospedes' )
 admin.site.register(Reserva, ReservaAdmin),
 
 admin.site.register(Endereco),

@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-d!@=h9xkinq$5o8(3yur325c&z@lv7qr!7wgb=790-o%^qhy6(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pousadaeasy.pythonanywhere.com','127.0.0.1','localhost']
 
 
 # Application definition
@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.humanize',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

@@ -1,4 +1,6 @@
 {% extends 'base/base.html' %}
+{% load humanize %}
+
 
 {% block content %}
   <h1 class="titulo_centro">Reservas</h1>
@@ -50,6 +52,7 @@
     <table class="table table-striped" id="tabela-produtos">
       <thead>
         <tr>
+          <th class="ordenavel">Confirmar</th>
           <th class="ordenavel">Quarto</th>
           <th class="ordenavel">Hospede</th>
           <th class="ordenavel">Check-in</th>
@@ -65,17 +68,22 @@
       <tbody>
         {% for item in hospedados %}
           <tr>
+            <td>
+              <a type="button" class="far fa-trash-alt" href="/hospedagem/checkin/{{item.id}}" style="font-size:20px; color:#06451E">Check-in</a>
+            </td>
             <td>{{ item.reserva.quarto.numero }}</td>
             <td>{{ item.hospede.nome }}</td>
             <td>{{ item.reserva.data_entrada }}</td>
             <td>{{ item.reserva.data_saida }}</td>
             <td>{{ item.reserva.diarias }}</td>
             <td>{{item.status}}</td>
-            <td>{{ item.reserva.valor}}</td>
-            <td>{{item.valor_comanda}}</td>
-            <td>{{item.valor_total}}</td>
+            <td>{{ item.reserva.valor|intcomma}}</td>
+            <td>{{item.valor_comanda|intcomma}}</td>
+            <td>{{item.valor_total|intcomma}}</td>
             <td>
               <a type="button" class="far fa-trash-alt" href="/hospedagem/delete/{{item.id}}" style="font-size:20px; color:#FF0000"></a>
+              <label> -- </label>
+              <a type="button" class="far fa-trash-alt" href="/hospedagem/concluir/{{item.id}}" style="font-size:20px; color:#1049E4"></a>
           </td>
           </tr>
         {% endfor %}
