@@ -35,9 +35,7 @@ urlpatterns = [
     path('comanda/produto/delete/<idcomandaconsumo>/<idhospede>', views.comanda_produto_delete,
          name='comanda_produto_delete'),
 
-    path('testexml/', views.testexml, name='testexml'),
-
-    #path('<path:unknown_path>', views.home),
+    path('<path:unknown_path>', views.home),
 
 ]
 
