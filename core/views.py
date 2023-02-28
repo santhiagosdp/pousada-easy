@@ -1,4 +1,3 @@
-import requests
 from datetime import datetime, timedelta, date
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -513,62 +512,3 @@ def disponibilidade(request):
                'hoje': datetime.now().strftime('%Y/%m/%d')
                }
     return render(request, 'core/disponibilidade.html', context)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def buscaxml(request, url):
-    url =  url
-    url = "http://apps.sefaz.to.gov.br/portal-nfce/qrcodeNFCe?p=17230261585865274529650040000407371808815921|2|1|1|B3E7678F5847E6FA478DB98A887653024E09298E.xml"
-    print(url)
-    response = requests.get(url)
-    print("response:")
-    print(response)
-
-    if response.status_code == 200:
-        with open('xml-file.xml', 'wb') as f:
-            f.write(response.content)
-    else:
-        print('Erro ao baixar o arquivo XML')
-
-
-    context = {"response": response}
-    return render(request, 'testexml.html', context)
-
-
-from django.shortcuts import render
-from django.http import HttpResponse
-from pyzbar.pyzbar import decode
-from PIL import Image
-def testexml(request):
-    if request.method == 'POST':
-        foto = request.FILES.get('foto')
-        if foto:
-            imagem = Image.open(foto)
-            resultados = decode(imagem)
-            if resultados:
-                dados = resultados[0].data.decode('utf-8')
-                print("Dados do QRCODE:")
-                print(dados)
-                return buscaxml(request,dados )#HttpResponse(f'QR Code lido com sucesso! Dados: {dados}')
-            else:
-                return HttpResponse('Nenhum QR Code encontrado na imagem.')
-    return render(request, 'testexml.html') 
-
