@@ -28,76 +28,80 @@
     text-decoration: none;
 }
 
+
 </style>
 
 
-  <h1 class="titulo_centro">Reservas</h1>
+<h1 class="titulo_centro">Reservas</h1>
 
-  <form method="get" id="search-form" class="form-inline">
+<form method="get" id="search-form" class="form-inline">
     <!-- {% csrf_token %} -->
     <div class="row">
-      <div class="col-md-2">
-        <label for="numero_quarto" class="form-label">Número do Quarto</label>
-        <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
-        <div class="form-text"></div>
-      </div>
+        <div class="col-md-2">
+            <label for="numero_quarto" class="form-label">Número do Quarto</label>
+            <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto"
+                   aria-describedby="numero_quarto"/>
+            <div class="form-text"></div>
+        </div>
 
-      <div class="col-md-6">
-        <label for="hospede" class="form-label">Nome do Hospede</label>
-        <input name="hospede" type="text" class="form-control" id="hospede"  aria-describedby="hospede" disabled />
-        <div class="form-text"></div>
-      </div>
+        <div class="col-md-6">
+            <label for="hospede" class="form-label">Nome do Hospede</label>
+            <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" disabled/>
+            <div class="form-text"></div>
+        </div>
 
-      <div class="col-auto">
-        <label for="check-in" class="form-label">Data de check-in</label>
-        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled />
-        <div id="check-in" class="form-text"></div>
-      </div>
+        <div class="col-auto">
+            <label for="check-in" class="form-label">Data de check-in</label>
+            <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled/>
+            <div id="check-in" class="form-text"></div>
+        </div>
 
-      <div class="col-auto">
-        <label for="check-out" class="form-label">Data de check-out</label>
-        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
-        <div id="check-out" class="form-text"></div>
-      </div>
+        <div class="col-auto">
+            <label for="check-out" class="form-label">Data de check-out</label>
+            <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out"
+                   disabled/>
+            <div id="check-out" class="form-text"></div>
+        </div>
     </div>
     <div class="row botao_centro">
-      <div class="col">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
-      </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
     </div>
-  </form>
-  <form method="get" id="concluido" class="form-inline">
+</form>
+<form method="get" id="concluido" class="form-inline">
     <div class="row text-end">
-      <div class="col">
-        <input name="status" class="form-control" value="concluidos" type="hidden"/>
-        <button type="submit" class="btn btn-success" title="Hospedagens Concluidas" >Concluidos</button>
-      </div>
+        <div class="col">
+            <input name="status" class="form-control" value="concluidos" type="hidden"/>
+            <button type="submit" class="btn btn-success" title="Hospedagens Concluidas">Concluidos</button>
+        </div>
     </div>
-  </form>
+</form>
 
-  <br />
-  <div class="row">
+<br/>
+<div class="row">
     <table class="table" id="tabela-produtos">
-      <thead>
+        <thead>
         <tr>
-          <th class="ordenavel">Checkin</th>
-          <th class="ordenavel">Quarto</th>
-          <th class="ordenavel">Hospede</th>
-          <th class="ordenavel">Check-in</th>
-          <th class="ordenavel">Check-out</th>
-          <th class="ordenavel">Diárias</th>
-          <th class="ordenavel">Status</th>
-          <th class="ordenavel">Valor Diarias</th>
-          <th class="ordenavel">Valor Comanda</th>
-          <th class="ordenavel">Valor Total</th>
-          <th >#</th>
+            <th class="ordenavel">Checkin</th>
+            <th class="ordenavel">Quarto</th>
+            <th class="ordenavel">Hospede</th>
+            <th class="ordenavel">Check-in</th>
+            <th class="ordenavel">Check-out</th>
+            <th class="ordenavel">Diárias</th>
+            <th class="ordenavel">Status</th>
+            <th class="ordenavel">Valor Diarias</th>
+            <th class="ordenavel">Valor Comanda</th>
+            <th class="ordenavel">Valor Total</th>
+            <th>#</th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
         {% for item in hospedados %}
-          <tr>
+        <tr>
             <td>
-              <a type="button" class="botao-ok" href="/hospedagem/checkin/{{item.id}}" title="Fazer Check-in">Check-in</a>
+                <a type="button" class="botao-ok" href="/hospedagem/checkin/{{item.id}}"
+                   title="Fazer Check-in">Check-in</a>
             </td>
             <td>{{ item.reserva.quarto.numero }}</td>
             <td>{{ item.hospede.nome }}</td>
@@ -115,27 +119,28 @@
             <td style="background-color: LightSteelBlue; color: white">{{item.status}}</td>
             {% endif %}
 
-              <!-- HOSPEDADOS - SAINDO HOJE - AZUL  -->
+            <!-- HOSPEDADOS - SAINDO HOJE - AZUL  -->
             {% if item.reserva.data_saida == hoje %}
-              <td style="background-color: LightSteelBlue; color: white"> {{item.status}} </td>
+            <td style="background-color: LightSteelBlue; color: white"> {{item.status}}</td>
             {% endif %}
 
             <!-- ENCERRADOS - VERMELHO  -->
             {% if item.reserva.data_saida < hoje %}
-              <td style="background-color: OrangeRed; color: white" >{{item.status}}</td>
+            <td style="background-color: OrangeRed; color: white">{{item.status}}</td>
             {% endif %}
             <td>{{ item.reserva.valor|intcomma}}</td>
             <td>{{item.valor_comanda|intcomma}}</td>
             <td>{{item.valor_total|intcomma}}</td>
-            <td>
-              <a type="button" class="far fa-trash-alt botao-lixo" href="/hospedagem/delete/{{item.id}}" title="deletar"></a>
-              <a type="button" class="botao-ok" href="/hospedagem/concluir/{{item.id}}" title="Fazer Check-out">Check-out</a>
+            <td>                
+                <a type="button" class="botao-ok" href="/hospedagem/concluir/{{item.id}}" title="Fazer Check-out">Check-out</a>
+                <a type="button" class="far fa-trash-alt botao-lixo" href="/hospedagem/delete/{{item.id}}"
+                   title="deletar"></a>
             </td>
-          </tr>
+        </tr>
         {% endfor %}
-      </tbody>
+        </tbody>
     </table>
-  </div>
+</div>
 {% endblock %}
 
 

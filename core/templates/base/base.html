@@ -2,73 +2,79 @@
 <!doctype html>
 
 <html lang="pt-br">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="stylesheet" href="{% static 'estilo_base.css' %}">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.7/css/all.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <title>{{titulo}}</title>
-    
-  </head>
-  <style>
+
+</head>
+<style>
     .selector-for-some-widget {
       box-sizing: content-box;
     }
 
-  </style>
+
+</style>
 
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">HOME</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarScroll">
-          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'reservar' %}">Reservar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'comandas' %}">Comandas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="{% url 'disponibilidade' %}">Visualização</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Cadastros
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                <li><a class="dropdown-item" href="{% url 'clientes' %}">Clientes</a></li>
-                <li><a class="dropdown-item" href="{% url 'quartos' %}">Quartos</a></li>
-                <li><a class="dropdown-item" href="{% url 'produtos' %}">Produtos</a></li>
-              </ul>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <a class="btn btn-outline-danger" type="button" href="{% url 'logout' %}">{{request.user}} - Sair</a>
-          </div>
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'reservar' %}">Reservar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'comandas' %}">Comandas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'disponibilidade' %}">Visualização</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Cadastros
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                        <li><a class="dropdown-item" href="{% url 'clientes' %}">Clientes</a></li>
+                        <li><a class="dropdown-item" href="{% url 'quartos' %}">Quartos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'produtos' %}">Produtos</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <a class="btn btn-outline-danger" type="button" href="{% url 'logout' %}">{{request.user}} - Sair</a>
+            </div>
         </div>
-      </div>
-    </nav>
-
-
-    <div class="container">
-        {% block content %}
-        {% endblock %}
     </div>
-    
+</nav>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{% static 'script_base.js' %}"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  </body>
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'script_base.js' %}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
 </html>

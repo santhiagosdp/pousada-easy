@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.contrib.postgres.fields import ArrayField
 
 
 class Hospedado(models.Model):
@@ -13,15 +12,13 @@ class Hospedado(models.Model):
     valor_quarto = models.FloatField()
     valor_comanda = models.FloatField()
     diarias = models.IntegerField()
-    data_reserva= models.DateTimeField(default=timezone.now)
+    data_reserva = models.DateTimeField(default=timezone.now)
     data_entrada = models.DateField()
     data_saida = models.DateField()
 
     def dt_reserva(self):
         self.data_reserva = timezone.now()
         self.save()
-
-
 
 
 class Quarto(models.Model):
@@ -38,8 +35,7 @@ class Quarto(models.Model):
         self.save()
 
 
-
-class Endereco (models.Model):
+class Endereco(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
     habilitado = models.BooleanField(default=True)
@@ -51,8 +47,7 @@ class Endereco (models.Model):
     pais = models.CharField(max_length=200, default="Brasil")
 
 
-
-class Hospede (models.Model):
+class Hospede(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
     habilitado = models.BooleanField(default=True)
@@ -66,9 +61,7 @@ class Hospede (models.Model):
     endereco = models.ForeignKey(Endereco, on_delete=models.PROTECT)
 
 
-
-
-class Reserva (models.Model):
+class Reserva(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateField(default=timezone.now)
     quarto = models.ForeignKey(Quarto, on_delete=models.PROTECT)
@@ -79,14 +72,15 @@ class Reserva (models.Model):
     diarias = models.IntegerField()
     valor = models.FloatField(default=0)
 
-class Reserva_pendente (models.Model):
+
+class Reserva_pendente(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateField(default=timezone.now)
     habilitado = models.BooleanField(default=True)
     data_entrada = models.DateField(blank=True, null=False)
     quantidade_hospedes = models.IntegerField(default=0)
     data_saida = models.DateField(blank=True, null=False)
-    diarias = models.IntegerField(default = 0, blank=True, null=False)
+    diarias = models.IntegerField(default=0, blank=True, null=False)
 
 
 class Hospedes_reserva(models.Model):
@@ -98,10 +92,9 @@ class Hospedes_reserva(models.Model):
     status = models.CharField(max_length=200, default="EM ABERTO")
     valor_comanda = models.FloatField(default=0)
     valor_total = models.FloatField(default=0)
-    
 
 
-class Produto (models.Model):
+class Produto(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
     habilitado = models.BooleanField(default=True)
@@ -111,8 +104,6 @@ class Produto (models.Model):
     descricao = models.CharField(max_length=200)
 
 
-
-
 class Comanda_consumo(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
@@ -120,7 +111,8 @@ class Comanda_consumo(models.Model):
     hospedes_reserva = models.ForeignKey(Hospedes_reserva, on_delete=models.PROTECT)
     produto = models.ForeignKey(Produto, on_delete=models.PROTECT)
 
-class Fechamento_conta (models.Model):
+
+class Fechamento_conta(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     data_criacao = models.DateTimeField(default=timezone.now)
     habilitado = models.BooleanField(default=True)

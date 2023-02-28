@@ -1,19 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import authenticate, login, logout
+import requests
+from datetime import datetime, timedelta, date
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from datetime import datetime,timedelta, date
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
 
-from .models import Hospedado, Quarto, Hospede,Endereco,Reserva,Hospedes_reserva, Produto, Comanda_consumo, Fechamento_conta,Reserva_pendente
-
-# Create your views here.
-
-
-
-
-
-
+from .models import Quarto, Hospede, Endereco, Reserva, Hospedes_reserva, Produto, Comanda_consumo, \
+    Fechamento_conta, Reserva_pendente
 
 
 def cadastrar_usuario(request):
@@ -26,14 +19,14 @@ def cadastrar_usuario(request):
         form_usuario = UserCreationForm()
     return render(request, 'core/cadastro.html', {'form_usuario': form_usuario})
 
+
 @login_required
 def home(request, unknown_path=None):
     if unknown_path is not None:
         # Redireciona o usuário para a página inicial se a URL não existe
         return redirect('home')
-    
-    
-    return render(request, 'core/home.html', {'titulo':'Home'})
+
+    return render(request, 'core/home.html', {'titulo': 'Home'})
 
 
 @login_required
@@ -53,165 +46,165 @@ def clientes(request):
         estado = request.POST.get("estado")
         rua = request.POST.get("endereco")
         complemento = request.POST.get("complemento")
-        
-        endereco_cad =Endereco.objects.create(
-                usuario = request.user,
-                cep = cep,
-                cidade = cidade,
-                estado = estado,
-                rua = rua,
-                complemento = complemento)
+
+        endereco_cad = Endereco.objects.create(
+            usuario=request.user,
+            cep=cep,
+            cidade=cidade,
+            estado=estado,
+            rua=rua,
+            complemento=complemento)
         endereco_cad.save
 
         hospede_cad = Hospede.objects.create(
-                usuario = request.user,
-                habilitado = True,
-                nome = nome,
-                cpf = cpf,
-                rg = rg,
-                data_aniversario = data_aniversario,
-                sexo = sexo,
-                email = email,
-                telefone = telefone,
-                endereco = endereco_cad)
+            usuario=request.user,
+            habilitado=True,
+            nome=nome,
+            cpf=cpf,
+            rg=rg,
+            data_aniversario=data_aniversario,
+            sexo=sexo,
+            email=email,
+            telefone=telefone,
+            endereco=endereco_cad)
         hospede_cad.save()
-        return redirect('clientes') 
-    #####FIM DO CADASTRO DO CLIENTE
+        return redirect('clientes')
+        #####FIM DO CADASTRO DO CLIENTE
 
-
-    hospedes = Hospede.objects.filter(habilitado = True, usuario=request.user).order_by('nome')
+    hospedes = Hospede.objects.filter(habilitado=True, usuario=request.user).order_by('nome')
 
     ## botão de buscar hospede get
     buscar = request.GET.get('search')
     if buscar:
-        hospedes = Hospede.objects.filter(habilitado = True, usuario=request.user, nome__icontains = buscar).order_by('nome')
+        hospedes = Hospede.objects.filter(habilitado=True, usuario=request.user, nome__icontains=buscar).order_by(
+            'nome')
     ####### FIM DO BUSCAR
 
-    return render(request, 'core/clientes.html', {'titulo':'Clientes', 'hospedes':hospedes})
+    return render(request, 'core/clientes.html', {'titulo': 'Clientes', 'hospedes': hospedes})
 
 
 @login_required
-def quartos(request):    
+def quartos(request):
     ##CADASTRO DE QUARTO POST
-    if request.method == 'POST':   
+    if request.method == 'POST':
         quarto_cad = Quarto.objects.create(
-                usuario = request.user,
-                tipo = request.POST.get("tipo"),
-                numero = request.POST.get("numero"),
-                capacidade = request.POST.get("capacidade"),
-                descricao = request.POST.get("descricao")
+            usuario=request.user,
+            tipo=request.POST.get("tipo"),
+            numero=request.POST.get("numero"),
+            capacidade=request.POST.get("capacidade"),
+            descricao=request.POST.get("descricao")
         )
         quarto_cad.save
 
-        return redirect('quartos') 
-    #####  FIM DO CADASTRO DO QUARTO
+        return redirect('quartos')
+        #####  FIM DO CADASTRO DO QUARTO
 
-
-    quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero')
+    quartos = Quarto.objects.filter(habilitado=True, usuario=request.user).order_by('numero')
 
     ## botão de buscar hospede get
     buscar = request.GET.get('search')
     if buscar:
-        quartos = Quarto.objects.filter(habilitado = True, usuario=request.user, numero__icontains = buscar).order_by('numero')
+        quartos = Quarto.objects.filter(habilitado=True, usuario=request.user, numero__icontains=buscar).order_by(
+            'numero')
     ####### FIM DO BUSCAR
 
-    return render(request, 'core/quartos.html', {'titulo':'Quartos', 'quartos':quartos})
+    return render(request, 'core/quartos.html', {'titulo': 'Quartos', 'quartos': quartos})
 
 
 @login_required
-def produtos(request):    
+def produtos(request):
     ##CADASTRO DE QUARTO POST
-    if request.method == 'POST':   
+    if request.method == 'POST':
         produto_cad = Produto.objects.create(
-                usuario = request.user,
-                nome = request.POST.get("nome").upper(),
-                descricao = request.POST.get("descricao").upper(),
-                valor_custo = request.POST.get("valor_custo").replace(",", "."),
-                valor_venda = request.POST.get("valor_venda").replace(",", ".")
+            usuario=request.user,
+            nome=request.POST.get("nome").upper(),
+            descricao=request.POST.get("descricao").upper(),
+            valor_custo=request.POST.get("valor_custo").replace(",", "."),
+            valor_venda=request.POST.get("valor_venda").replace(",", ".")
         )
         produto_cad.save
 
-        return redirect('produtos') 
-    #####  FIM DO CADASTRO DO QUARTO
+        return redirect('produtos')
+        #####  FIM DO CADASTRO DO QUARTO
 
-
-    produtos = Produto.objects.filter(habilitado = True, usuario=request.user).order_by('nome')
+    produtos = Produto.objects.filter(habilitado=True, usuario=request.user).order_by('nome')
 
     ## botão de buscar hospede get
     buscar = request.GET.get('search')
     if buscar:
-        produtos = Produto.objects.filter(habilitado = True, usuario=request.user, nome__icontains = buscar).order_by('nome')
+        produtos = Produto.objects.filter(habilitado=True, usuario=request.user, nome__icontains=buscar).order_by(
+            'nome')
     ####### FIM DO BUSCAR
 
-    return render(request, 'core/produtos.html', {'titulo':'Produtos', 'produtos':produtos})
+    return render(request, 'core/produtos.html', {'titulo': 'Produtos', 'produtos': produtos})
 
 
 @login_required
 def comandas(request):
-    hospedados = Hospedes_reserva.objects.filter(usuario = request.user,
-                                                 habilitado = True
+    hospedados = Hospedes_reserva.objects.filter(usuario=request.user,
+                                                 habilitado=True
                                                  )
     aux = []
     abertos = []
-    hoje = date.today() # checkin tem que ser antes e checkout depois
+    hoje = date.today()  # checkin tem que ser antes e checkout depois
     for item in hospedados:
-        if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje and item.status == "CHECK-IN OK":
+        if item.reserva.data_entrada < hoje and item.reserva.data_saida >= hoje and item.status == "CHECK-IN":
             aux.append(item)
-            #print (item)
-        if item.reserva.data_saida < hoje and item.status == "EM ABERTO":
+            # print (item)
+        if item.reserva.data_saida < hoje and item.status != "CHECK-OUT":
             abertos.append(item)
     hospedados = aux
-    context = {'titulo':'Comandas',
+    context = {'titulo': 'Comandas',
                'hospedados': hospedados,
-               'abertos' : abertos }
+               'abertos': abertos}
     return render(request, 'core/comandas.html', context)
+
 
 @login_required
 def itenscomanda(request, id):
+    hospede_reserva = Hospedes_reserva.objects.get(id=id,
+                                                   usuario=request.user,
+                                                   habilitado=True
+                                                   )
 
-    hospede_reserva = Hospedes_reserva.objects.get(id = id,
-                                                   usuario = request.user,
-                                                   habilitado = True
-    )
-    
-    produtos = Produto.objects.filter(habilitado = True,
-                                      usuario = request.user
-    )
-    
+    produtos = Produto.objects.filter(habilitado=True,
+                                      usuario=request.user
+                                      )
+
     produtos_comanda = Comanda_consumo.objects.filter(usuario=request.user,
-                                                      habilitado = True,
-                                                      hospedes_reserva = hospede_reserva
-    )
-    
+                                                      habilitado=True,
+                                                      hospedes_reserva=hospede_reserva
+                                                      )
+
     if request.method == 'POST':
-        produto = Produto.objects.get(usuario = request.user,
+        produto = Produto.objects.get(usuario=request.user,
                                       id=request.POST.get("id_produto"),
-        )
+                                      )
         quantidade = int(request.POST.get("quantidade"))
-        while quantidade>0:
-            quantidade = quantidade -1
-            produtos_comanda = Comanda_consumo.objects.create(usuario = request.user,
-                                                            hospedes_reserva = hospede_reserva,
-                                                            produto = produto
-            )      
+        while quantidade > 0:
+            quantidade = quantidade - 1
+            produtos_comanda = Comanda_consumo.objects.create(usuario=request.user,
+                                                              hospedes_reserva=hospede_reserva,
+                                                              produto=produto
+                                                              )
             produtos_comanda.save
             print(produto)
 
-        return redirect('/comanda/hospedagem/'+id)
-    
+        return redirect('/comanda/hospedagem/' + id)
+
     valor_comanda = 0
     for item in produtos_comanda:
         valor_comanda = valor_comanda + item.produto.valor_venda
-    
-    produtos_comanda_com_indices = [(i+1, p) for i, p in enumerate(produtos_comanda)]
-    context = {'titulo':'Itens da Comanda',
-               'hospede_reserva' : hospede_reserva,
-               "produtos" : produtos,
-               "produtos_comanda" : produtos_comanda_com_indices,
-               "valor_comanda" : valor_comanda
+
+    produtos_comanda_com_indices = [(i + 1, p) for i, p in enumerate(produtos_comanda)]
+    context = {'titulo': 'Itens da Comanda',
+               'hospede_reserva': hospede_reserva,
+               "produtos": produtos,
+               "produtos_comanda": produtos_comanda_com_indices,
+               "valor_comanda": valor_comanda
                }
-    
-    return render(request, 'core/itenscomanda.html', context )
+
+    return render(request, 'core/itenscomanda.html', context)
 
 
 @login_required
@@ -221,12 +214,14 @@ def cliente_delete(request, id):
     desabilitar.save()
     return redirect('clientes')
 
+
 @login_required
 def quarto_delete(request, id):
     desabilitar = Quarto.objects.get(id=id)
     desabilitar.habilitado = False
     desabilitar.save()
     return redirect('quartos')
+
 
 @login_required
 def produto_delete(request, id):
@@ -235,19 +230,21 @@ def produto_delete(request, id):
     desabilitar.save()
     return redirect('produtos')
 
+
 @login_required
 def comanda_produto_delete(request, idcomandaconsumo, idhospede):
     desabilitar = Comanda_consumo.objects.get(id=idcomandaconsumo,
-                                              usuario = request.user
-    )
+                                              usuario=request.user
+                                              )
     desabilitar.habilitado = False
     desabilitar.save()
-    return redirect('/comanda/hospedagem/'+idhospede)
+    return redirect('/comanda/hospedagem/' + idhospede)
+
 
 @login_required
 def hospedagem_checkin(request, id):
-    #CHECKIN DO Hospede_Reserva
-    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    # CHECKIN DO Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario=request.user)
     if hospede_reserva.status != "CHECK-IN":
         hospede_reserva.status = 'CHECK-IN'
     else:
@@ -256,121 +253,119 @@ def hospedagem_checkin(request, id):
 
     return redirect('disponibilidade')
 
+
 @login_required
 def hospedagem_delete(request, id):
-
-    #Deletando Hospede_Reserva
-    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    # Deletando Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario=request.user)
     hospede_reserva.habilitado = False
     hospede_reserva.status = 'DELETADO'
     hospede_reserva.save()
 
-    #Deletando Reserva
+    # Deletando Reserva
     Reserva = hospede_reserva.reserva
     Reserva.habilitado = False
     Reserva.save()
 
-    #deletando as comandas 
-    desabilitar = Comanda_consumo.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
-    for comanda in desabilitar: 
+    # deletando as comandas
+    desabilitar = Comanda_consumo.objects.filter(usuario=request.user, hospedes_reserva=hospede_reserva)
+    for comanda in desabilitar:
         comanda.habilitado = False
         comanda.save()
     # deletando os fechamento_conta
-    desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
-    for fechamento in desabilitar: 
+    desabilitar = Fechamento_conta.objects.filter(usuario=request.user, hospedes_reserva=hospede_reserva)
+    for fechamento in desabilitar:
         fechamento.habilitado = False
         fechamento.save()
-    
+
     return redirect('disponibilidade')
 
 
 @login_required
 def hospedagem_concluir(request, id):
-    #concluindo Hospede_Reserva
-    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario = request.user)
+    # concluindo Hospede_Reserva
+    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario=request.user)
     hospede_reserva.status = 'CHECK-OUT'
     hospede_reserva.save()
 
-    #Deletando Reserva
+    # Deletando Reserva
     Reserva = hospede_reserva.reserva
     Reserva.habilitado = False
     Reserva.save()
 
-    #deletando as comandas 
-    desabilitar = Comanda_consumo.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
-    for comanda in desabilitar: 
+    # deletando as comandas
+    desabilitar = Comanda_consumo.objects.filter(usuario=request.user, hospedes_reserva=hospede_reserva)
+    for comanda in desabilitar:
         comanda.habilitado = False
         comanda.save()
     # deletando os fechamento_conta
-    #desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
-    #for fechamento in desabilitar: 
-        #fechamento.habilitado = False
-        #fechamento.save()
-    
+    # desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
+    # for fechamento in desabilitar:
+    # fechamento.habilitado = False
+    # fechamento.save()
+
     return redirect('disponibilidade')
+
 
 @login_required
 def reservar(request):
     quartos = []
-    clientes = Hospede.objects.filter(habilitado = True, usuario=request.user).order_by('nome')
+    clientes = Hospede.objects.filter(habilitado=True, usuario=request.user).order_by('nome')
     quartos_disponiveis = []
     quartos_reservados = []
     res_pendente = ""
 
     ## botão de buscar hospede get
-    checkin = request.GET.get('checkin')    
+    checkin = request.GET.get('checkin')
     checkout = request.GET.get('checkout')
     quantidade_hospedes = request.GET.get('quantidade_hospedes')
     id_quarto = request.GET.get('id_quarto')
 
-
-
-    if request.method == 'POST':    #### cadastrar a reserva confirmada
-        #print("METODO POST")
-        #print("#########################POST")
-        #print(request.POST.get("valortotal"))
-        #print(float(request.POST.get("valortotal")))
-
+    if request.method == 'POST':  #### cadastrar a reserva confirmada
+        # print("METODO POST")
+        # print("#########################POST")
+        # print(request.POST.get("valortotal"))
+        # print(float(request.POST.get("valortotal")))
 
         pendente = Reserva_pendente.objects.get(
-            usuario = request.user
-            )
+            usuario=request.user
+        )
         quarto = Quarto.objects.get(
-            id = request.POST.get("id_quarto"),
-            usuario = request.user,
+            id=request.POST.get("id_quarto"),
+            usuario=request.user,
         )
         ## criando reserva confirmada   
         reserva = Reserva.objects.create(
-            usuario = request.user,
-            quarto = quarto,
-            quantidade_hospedes = pendente.quantidade_hospedes,
-            data_entrada = pendente.data_entrada,
-            data_saida = pendente.data_saida,
-            diarias = pendente.diarias,
-            valor = float(request.POST.get("valortotal").replace(",", "."))
-            )   
+            usuario=request.user,
+            quarto=quarto,
+            quantidade_hospedes=pendente.quantidade_hospedes,
+            data_entrada=pendente.data_entrada,
+            data_saida=pendente.data_saida,
+            diarias=pendente.diarias,
+            valor=float(request.POST.get("valortotal").replace(",", "."))
+        )
         print(reserva)
         reserva.save()
-        
+
         hospede = Hospede.objects.get(
-            usuario = request.user,
-            id = request.POST.get("cliente")
+            usuario=request.user,
+            id=request.POST.get("cliente")
         )
 
         hospedes_reserva = Hospedes_reserva.objects.create(
-            usuario = request.user,
-            hospede = hospede,
-            reserva = reserva
+            usuario=request.user,
+            hospede=hospede,
+            reserva=reserva
         )
         hospedes_reserva.save()
 
-        #apaga as reservas não resolvidas
+        # apaga as reservas não resolvidas
         pendente = Reserva_pendente.objects.filter(usuario=request.user)
         pendente.delete()
         ###############
 
-        return redirect('disponibilidade') #pagina de confirmação
-    
+        return redirect('disponibilidade')  # pagina de confirmação
+
 
 
     else:
@@ -378,18 +373,18 @@ def reservar(request):
             checkin = datetime.strptime(checkin, "%Y-%m-%d")
             checkout = datetime.strptime(checkout, "%Y-%m-%d")
             quantidade_hospedes = int(quantidade_hospedes)
-            
-            #if data checkin menor que checkout
+
+            # if data checkin menor que checkout
             if checkin < checkout:
-                #apaga as reservas não resolvidas
+                # apaga as reservas não resolvidas
                 pendente = Reserva_pendente.objects.filter(usuario=request.user)
                 pendente.delete()
                 #########               
 
-                quartos = Quarto.objects.filter(habilitado = True, usuario=request.user).order_by('numero') #__icontains
-                
-                #SEPARAR QUARTOS QUE TEM CAPACIDADE PARA OS HOSPEDES
-                for quarto in quartos: 
+                quartos = Quarto.objects.filter(habilitado=True, usuario=request.user).order_by('numero')  # __icontains
+
+                # SEPARAR QUARTOS QUE TEM CAPACIDADE PARA OS HOSPEDES
+                for quarto in quartos:
                     if quarto.capacidade >= quantidade_hospedes:
                         quartos_disponiveis.append(quarto)
                         print(quartos_disponiveis)
@@ -397,15 +392,15 @@ def reservar(request):
                 ##########
 
                 ##DEFINIR ARRAY DE DATAS DA RESERVA_A_CONFIRMAR
-                datas_check = [] ## datas da reserva que esta em andamento
+                datas_check = []  ## datas da reserva que esta em andamento
                 data = checkin
                 diarias = 0
                 while data < checkout:
                     datas_check.append(data)
-                    diarias = diarias+1
-                    data = data+timedelta(1)
+                    diarias = diarias + 1
+                    data = data + timedelta(1)
 
-                reservas = Reserva.objects.filter(habilitado = True, usuario=request.user).order_by('data_entrada')
+                reservas = Reserva.objects.filter(habilitado=True, usuario=request.user).order_by('data_entrada')
                 for reserva in reservas:
                     reserva.data_entrada = datetime.strptime(str(reserva.data_entrada), "%Y-%m-%d")
                     reserva.data_saida = datetime.strptime(str(reserva.data_saida), "%Y-%m-%d")
@@ -413,18 +408,18 @@ def reservar(request):
                     data = reserva.data_entrada
                     while data < reserva.data_saida:
                         datas_reserva.append(data)
-                        data = data+timedelta(1)
+                        data = data + timedelta(1)
                     print(datas_reserva)
                     print("datas_reserva ##########################")
-                    
+
                     for data in datas_check:
-                        for data2 in datas_reserva: 
-                            if  data == data2:
+                        for data2 in datas_reserva:
+                            if data == data2:
                                 quartos_reservados.append(reserva.quarto)
                                 break
-                            #if
-                        #for
-                    #for
+                            # if
+                        # for
+                    # for
                     print(quartos_reservados)
                     print("quartos_reservados ##########################")
 
@@ -441,7 +436,7 @@ def reservar(request):
 
                 print(quartos_final)
                 print("quartos_final ##########################")
-            ####### FIM DO BUSCAR
+                ####### FIM DO BUSCAR
                 quartos_disponiveis = quartos_final
                 ############## criar_reserva_pendente()
                 res_pendente = Reserva_pendente.objects.create(
@@ -449,18 +444,19 @@ def reservar(request):
                     data_entrada=checkin,
                     data_saida=checkout,
                     quantidade_hospedes=quantidade_hospedes,
-                    diarias = diarias
+                    diarias=diarias
                 )
                 res_pendente.save()
                 ######### fim criar reserva pendente
 
-        else: 
+        else:
             if id_quarto:  # GET QUARTO 
-            
-                context = {'clientes':clientes, 'titulo':"Reservar Quarto", "pagina":"dados_reserva"}
-                return render(request, 'core/reservar.html', context)   
-            
-    context = { "clientes":clientes,'titulo':"Reservar Quarto", 'quartos':quartos_disponiveis, "pagina":"quartos","pendente":res_pendente}
+
+                context = {'clientes': clientes, 'titulo': "Reservar Quarto", "pagina": "dados_reserva"}
+                return render(request, 'core/reservar.html', context)
+
+    context = {"clientes": clientes, 'titulo': "Reservar Quarto", 'quartos': quartos_disponiveis, "pagina": "quartos",
+               "pendente": res_pendente}
     return render(request, 'core/reservar.html', context)
 
 
@@ -470,10 +466,9 @@ def logout_view(request):
     return redirect('home')
 
 
-
 @login_required
 def disponibilidade(request):
-    hospedados = Hospedes_reserva.objects.filter(usuario = request.user, habilitado = True)
+    hospedados = Hospedes_reserva.objects.filter(usuario=request.user, habilitado=True)
     aux = []
     for item in hospedados:
         if item.status != "CHECK-OUT":
@@ -482,12 +477,12 @@ def disponibilidade(request):
     #######GET DE PESQUISAR FILTRAR
     quarto = request.GET.get('quarto')
     hospede = request.GET.get('hospede')
-    checkin = request.GET.get('checkin')  #'2023-02-25 00:00:00+00:00'
-    checkout =request.GET.get('checkout')
+    checkin = request.GET.get('checkin')  # '2023-02-25 00:00:00+00:00'
+    checkout = request.GET.get('checkout')
 
-    if quarto:# or checkin or checkout:
-        quarto_pesq = Quarto.objects.filter(habilitado = True, usuario = request.user, numero__icontains = quarto)
-        #hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
+    if quarto:  # or checkin or checkout:
+        quarto_pesq = Quarto.objects.filter(habilitado=True, usuario=request.user, numero__icontains=quarto)
+        # hospede_pesq = Hospede.objects.filter(usuario = request.user, nome__icontains = hospede)
         pesquisa = []
         for item in hospedados:
             for quarto in quarto_pesq:
@@ -495,29 +490,85 @@ def disponibilidade(request):
                     pesquisa.append(item)
         hospedados = pesquisa
 
-    #Se clicar em concluidos
+    # Se clicar em concluidos
     status = request.GET.get('status')
-    if status: # == concluidos
-        hospedados = Hospedes_reserva.objects.filter(habilitado = True, usuario=request.user, status="CHECK-OUT")
+    if status:  # == concluidos
+        hospedados = Hospedes_reserva.objects.filter(habilitado=True, usuario=request.user, status="CHECK-OUT")
 
     ## Definir Valores de comanda e total
-    comandas = Comanda_consumo.objects.filter(habilitado = True, usuario = request.user)
+    comandas = Comanda_consumo.objects.filter(habilitado=True, usuario=request.user)
     for item in hospedados:
         item.reserva.data_saida = item.reserva.data_saida.strftime('%Y/%m/%d')
         item.reserva.data_entrada = item.reserva.data_entrada.strftime('%Y/%m/%d')
         item.reserva.data_criacao = item.reserva.data_criacao.strftime('%Y/%m/%d')
-        for comanda in comandas: 
+        for comanda in comandas:
             if comanda.hospedes_reserva == item:
-                item.valor_comanda = item.valor_comanda+comanda.produto.valor_venda
+                item.valor_comanda = item.valor_comanda + comanda.produto.valor_venda
         item.valor_total = item.reserva.valor + item.valor_comanda
 
-
-    #ordenando pela data de entrada checkin
+    # ordenando pela data de entrada checkin
     hospedados = sorted(hospedados, key=lambda x: x.reserva.data_entrada)
-    context = {'titulo' : 'Reservas Feitas',
-               'hospedados' : hospedados,
+    context = {'titulo': 'Reservas Feitas',
+               'hospedados': hospedados,
                'hoje': datetime.now().strftime('%Y/%m/%d')
                }
     return render(request, 'core/disponibilidade.html', context)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def buscaxml(request, url):
+    url =  url
+    url = "http://apps.sefaz.to.gov.br/portal-nfce/qrcodeNFCe?p=17230261585865274529650040000407371808815921|2|1|1|B3E7678F5847E6FA478DB98A887653024E09298E.xml"
+    print(url)
+    response = requests.get(url)
+    print("response:")
+    print(response)
+
+    if response.status_code == 200:
+        with open('xml-file.xml', 'wb') as f:
+            f.write(response.content)
+    else:
+        print('Erro ao baixar o arquivo XML')
+
+
+    context = {"response": response}
+    return render(request, 'testexml.html', context)
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from pyzbar.pyzbar import decode
+from PIL import Image
+def testexml(request):
+    if request.method == 'POST':
+        foto = request.FILES.get('foto')
+        if foto:
+            imagem = Image.open(foto)
+            resultados = decode(imagem)
+            if resultados:
+                dados = resultados[0].data.decode('utf-8')
+                print("Dados do QRCODE:")
+                print(dados)
+                return buscaxml(request,dados )#HttpResponse(f'QR Code lido com sucesso! Dados: {dados}')
+            else:
+                return HttpResponse('Nenhum QR Code encontrado na imagem.')
+    return render(request, 'testexml.html') 
 

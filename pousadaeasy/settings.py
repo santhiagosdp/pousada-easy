@@ -1,10 +1,8 @@
-
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -15,8 +13,7 @@ SECRET_KEY = 'django-insecure-d!@=h9xkinq$5o8(3yur325c&z@lv7qr!7wgb=790-o%^qhy6(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pousadaeasy.pythonanywhere.com','127.0.0.1','localhost']
-
+ALLOWED_HOSTS = ['pousadaeasy.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -27,7 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    #'livesync',
+    # 'livesync',
     'django.contrib.staticfiles',
     'core',
 ]
@@ -40,7 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'livesync.core.middleware.DjangoLiveSyncMiddleware',
+    # 'livesync.core.middleware.DjangoLiveSyncMiddleware',
 ]
 
 ROOT_URLCONF = 'pousadaeasy.urls'
@@ -63,7 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pousadaeasy.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -73,7 +69,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -93,7 +88,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -106,7 +100,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

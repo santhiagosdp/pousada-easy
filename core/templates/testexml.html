@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leitor de QR Code</title>
+</head>
+<body>
+	<form action="/testexml/" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<input type="file" name="foto" accept="image/*">
+		<button type="submit">Enviar</button>
+	</form>
+</body>
+</html>

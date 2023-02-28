@@ -3,174 +3,183 @@
 {%block content%}
 
 <!-- Modal -->
-<div class="modal fade" id="modalcadastrocliente" tabindex="-1" aria-labelledby="modalcadastroclienteLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalcadastroclienteLabel">Cadastro de novo Cliente</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form method="post" class="form-inline">
-        {% csrf_token %} 
-        <div class="modal-body"> <!-- INICIO modal-body-->
-    
-          <div class="row col-md-12"> <!-- INICIO NOME-->
-            <label for="nome" class="form-label">Nome:</label>
-            <input type="text" id="nome" name="nome" class="form-control " placeholder="Nome do cliente" required autofocus>
-          </div> <!-- FIM NOME-->
-    
-          <div class="row"><!-- INICIO cpf e rg-->
-            <div class="col-md-6">
-              <label for="cpf" class="form-label espaco_abaixo">CPF:</label>
-              <input type="text" id="cpf" name="cpf" class="form-control" required>
+<div class="modal fade" id="modalcadastrocliente" tabindex="-1" aria-labelledby="modalcadastroclienteLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalcadastroclienteLabel">Cadastro de novo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-md-6">
-              <label for="rg" class="form-label espaco_abaixo">RG:</label>
-              <input type="text" id="rg" name="rg" class="form-control" required>
-            </div>
-          </div> <!-- fim cpf e rg-->
-    
-          <div class="row"> <!-- inicio aniversario e sexo-->
-            <div class="col-md-6">
-              <label for="data_aniversario" class="form-label espaco_abaixo">Data de Aniversário</label>
-              <input type="date" id="data_aniversario" name="data_aniversario" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-              <label for="sexo" class="form-label espaco_abaixo">Sexo:</label>
-              <select id="sexo" name="sexo" class="form-control" required>
-                  <option value="" disabled selected>Selecione o sexo</option>
-                  <option value="femi">Feminino</option>
-                  <option value="masc">Masculino</option>
-                  <option value="mt">Outro</option>
-                  <option value="mt">Não Informado</option>
-              </select>
-            </div>
-          </div> <!-- fim aniversario e sexo-->
-    
-          <div class="row col-md-12"> <!-- inicio email-->
-            <label for="email" class="form-label espaco_abaixo">E-mail</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="E-mail do cliente">
-          </div> <!-- FIM-->
-    
-          <div class="row col-md-12"> <!-- inicio telefone-->
-            <label for="telefone" class="form-label espaco_abaixo">Telefone</label>
-            <input type="phone" id="telefone" name="telefone" class="form-control" placeholder="Telefone do cliente" required>
-          </div>
-    
-          <div class="row"> <!-- INICIO CEP, CIDADE E ESTAO-->
-            <div class="col-md-4">
-              <label for="cep" class="form-label espaco_abaixo">CEP:</label>
-              <input type="text" id="cep" name="cep" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-              <label for="cidade" class="form-label espaco_abaixo">Cidade:</label>
-              <input type="text" id="cidade" name="cidade" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-              <label for="estado" class="form-label espaco_abaixo">Estado:</label>
-              <select name="estado" id="estado" name="estado" class="form-control" required>
-                <option value="" disabled selected>Estado</option>
-                <option value="to">TO</option>
-                <option value="ac">AC</option>
-                <option value="al">AL</option>
-                <option value="ap">AP</option>
-                <option value="am">AM</option>
-                <option value="ba">BA</option>
-                <option value="ce">CE</option>
-                <option value="df">DF</option>
-                <option value="es">ES</option>
-                <option value="go">GO</option>
-                <option value="ma">MA</option>
-                <option value="mt">MT</option>
-                <option value="ms">MS</option>
-                <option value="mg">MG</option>
-                <option value="pa">PA</option>
-                <option value="pb">PB</option>
-                <option value="pr">PR</option>
-                <option value="pe">PE</option>
-                <option value="pi">PI</option>
-                <option value="rj">RJ</option>
-                <option value="rn">RN</option>
-                <option value="rs">RS</option>
-                <option value="ro">RO</option>
-                <option value="rr">RR</option>
-                <option value="sc">SC</option>
-                <option value="sp">SP</option>
-                <option value="se">SE</option>
-                <option value="to">TO</option>
-              </select>
-            </div>
-          </div> <!-- FIM CEP, CIDADE E ESTAO-->
-    
-          <div class="row"> <!-- INICIO -->
-            <div class="col-md-6">
-              <label for="endereco" class="form-label espaco_abaixo">Logradouro:</label>
-              <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua 00, alam 00, n 0">
-            </div>
-            <div class="col-md-6">
-              <label for="complemento" class="form-label espaco_abaixo">Complemento:</label>
-              <input type="text" id="complemento" name="complemento" class="form-control" placeholder="Referência do Endereço">
-            </div>
-          </div>
-        </div> <!-- FIM modal-body-->
-    
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <form method="post" class="form-inline">
+                {% csrf_token %}
+                <div class="modal-body"> <!-- INICIO modal-body-->
+
+                    <div class="row col-md-12"> <!-- INICIO NOME-->
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input type="text" id="nome" name="nome" class="form-control " placeholder="Nome do cliente"
+                               required autofocus>
+                    </div> <!-- FIM NOME-->
+
+                    <div class="row"><!-- INICIO cpf e rg-->
+                        <div class="col-md-6">
+                            <label for="cpf" class="form-label espaco_abaixo">CPF:</label>
+                            <input type="text" id="cpf" name="cpf" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="rg" class="form-label espaco_abaixo">RG:</label>
+                            <input type="text" id="rg" name="rg" class="form-control" required>
+                        </div>
+                    </div> <!-- fim cpf e rg-->
+
+                    <div class="row"> <!-- inicio aniversario e sexo-->
+                        <div class="col-md-6">
+                            <label for="data_aniversario" class="form-label espaco_abaixo">Data de Aniversário</label>
+                            <input type="date" id="data_aniversario" name="data_aniversario" class="form-control"
+                                   required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sexo" class="form-label espaco_abaixo">Sexo:</label>
+                            <select id="sexo" name="sexo" class="form-control" required>
+                                <option value="" disabled selected>Selecione o sexo</option>
+                                <option value="femi">Feminino</option>
+                                <option value="masc">Masculino</option>
+                                <option value="mt">Outro</option>
+                                <option value="mt">Não Informado</option>
+                            </select>
+                        </div>
+                    </div> <!-- fim aniversario e sexo-->
+
+                    <div class="row col-md-12"> <!-- inicio email-->
+                        <label for="email" class="form-label espaco_abaixo">E-mail</label>
+                        <input type="email" id="email" name="email" class="form-control"
+                               placeholder="E-mail do cliente">
+                    </div> <!-- FIM-->
+
+                    <div class="row col-md-12"> <!-- inicio telefone-->
+                        <label for="telefone" class="form-label espaco_abaixo">Telefone</label>
+                        <input type="phone" id="telefone" name="telefone" class="form-control"
+                               placeholder="Telefone do cliente" required>
+                    </div>
+
+                    <div class="row"> <!-- INICIO CEP, CIDADE E ESTAO-->
+                        <div class="col-md-4">
+                            <label for="cep" class="form-label espaco_abaixo">CEP:</label>
+                            <input type="text" id="cep" name="cep" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="cidade" class="form-label espaco_abaixo">Cidade:</label>
+                            <input type="text" id="cidade" name="cidade" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="estado" class="form-label espaco_abaixo">Estado:</label>
+                            <select name="estado" id="estado" name="estado" class="form-control" required>
+                                <option value="" disabled selected>Estado</option>
+                                <option value="to">TO</option>
+                                <option value="ac">AC</option>
+                                <option value="al">AL</option>
+                                <option value="ap">AP</option>
+                                <option value="am">AM</option>
+                                <option value="ba">BA</option>
+                                <option value="ce">CE</option>
+                                <option value="df">DF</option>
+                                <option value="es">ES</option>
+                                <option value="go">GO</option>
+                                <option value="ma">MA</option>
+                                <option value="mt">MT</option>
+                                <option value="ms">MS</option>
+                                <option value="mg">MG</option>
+                                <option value="pa">PA</option>
+                                <option value="pb">PB</option>
+                                <option value="pr">PR</option>
+                                <option value="pe">PE</option>
+                                <option value="pi">PI</option>
+                                <option value="rj">RJ</option>
+                                <option value="rn">RN</option>
+                                <option value="rs">RS</option>
+                                <option value="ro">RO</option>
+                                <option value="rr">RR</option>
+                                <option value="sc">SC</option>
+                                <option value="sp">SP</option>
+                                <option value="se">SE</option>
+                                <option value="to">TO</option>
+                            </select>
+                        </div>
+                    </div> <!-- FIM CEP, CIDADE E ESTAO-->
+
+                    <div class="row"> <!-- INICIO -->
+                        <div class="col-md-6">
+                            <label for="endereco" class="form-label espaco_abaixo">Logradouro:</label>
+                            <input type="text" id="endereco" name="endereco" class="form-control"
+                                   placeholder="Rua 00, alam 00, n 0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="complemento" class="form-label espaco_abaixo">Complemento:</label>
+                            <input type="text" id="complemento" name="complemento" class="form-control"
+                                   placeholder="Referência do Endereço">
+                        </div>
+                    </div>
+                </div> <!-- FIM modal-body-->
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 </div>
 
 
+<h1 class="titulo_centro">Clientes Cadastrados</h1>
 
-  <h1 class="titulo_centro">Clientes Cadastrados</h1>
-
-  <div class="row">
+<div class="row">
     <div class="col-md-6">
-    <form method="get" id="search-form" class="form-inline">
-      <div class="input-group mb-3">
-        <input class="form-control" type="search" name="search"  id="search" placeholder="Buscar Cliente" aria-label="Buscar" />
-        <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
-      </div>
-    </form>
-  </div>
-  <div class="col-md-5"></div>
-  <div class="col-md-1">
-    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalcadastrocliente">+Cliente</button>
-  </div>
+        <form method="get" id="search-form" class="form-inline">
+            <div class="input-group mb-3">
+                <input class="form-control" type="search" name="search" id="search" placeholder="Buscar Cliente"
+                       aria-label="Buscar"/>
+                <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalcadastrocliente">+Cliente
+        </button>
+    </div>
 
-  <div class="row">
-    <table class="table table-striped" id="tabela-produtos">
-      <thead>
-        <tr>
-          <th class="ordenavel">Nome:</th>
-          <th class="ordenavel">CPF:</th>
-          <th class="ordenavel">RG:</th>
-          <th class="ordenavel">Telefone:</th>
-          <th class="ordenavel">e-mail</th>
-          <th class="ordenavel">Aniversario:</th>
-          <th class="ordenavel">Cidade</th>
-          <th>#</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in hospedes %}
-          <tr>
-            <td>{{ item.nome }}</td>
-            <td>{{ item.cpf }}</td>
-            <td>{{ item.rg }}</td>
-            <td>{{ item.telefone }}</td>
-            <td>{{ item.email }}</td>
-            <td>{{ item.data_aniversario }}</td>
-            <td>{{ item.endereco.cidade }}/{{ item.endereco.estado }}</td>
-            <td>
-                <a type="button" class="far fa-trash-alt" href="/cliente/delete/{{item.id}}" style="font-size:20px; color:#FF0000"></a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-{% endblock %}
+    <div class="row">
+        <table class="table table-striped" id="tabela-produtos">
+            <thead>
+            <tr>
+                <th class="ordenavel">Nome:</th>
+                <th class="ordenavel">CPF:</th>
+                <th class="ordenavel">RG:</th>
+                <th class="ordenavel">Telefone:</th>
+                <th class="ordenavel">e-mail</th>
+                <th class="ordenavel">Aniversario:</th>
+                <th class="ordenavel">Cidade</th>
+                <th>#</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in hospedes %}
+            <tr>
+                <td>{{ item.nome }}</td>
+                <td>{{ item.cpf }}</td>
+                <td>{{ item.rg }}</td>
+                <td>{{ item.telefone }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.data_aniversario }}</td>
+                <td>{{ item.endereco.cidade }}/{{ item.endereco.estado }}</td>
+                <td>
+                    <a type="button" class="far fa-trash-alt" href="/cliente/delete/{{item.id}}"
+                       style="font-size:20px; color:#FF0000"></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endblock %}
