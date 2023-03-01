@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+<h1>Editar usuário</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+      </div>
+
+    <div class="form-group">
+      {{ form.first_name.label_tag }}
+      {{ form.first_name }}
+    </div>
+    <div class="form-group">
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+    </div>
+    <div class="form-group">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+    </div>
+
+   <div class="form-group">
+        {{form_senha.old_password.errors}}
+        <label>Senha antiga: </label>
+        {{form_senha.old_password}}
+    </div>
+
+    <div class="form-group">
+        {{form_senha.new_password1.errors}}
+        <label>Nova senha: </label>
+        {{form_senha.new_password1}}
+    </div>
+
+    <div class="form-group">
+        {{form_senha.new_password2.errors}}
+        <label>Confirmação de senha: </label>
+        {{form_senha.new_password2}}
+    </div>
+    <br>
+    <div class="form-group">
+      {{form_senha.is_active.errors}}
+      <label>Desmarque para cancelar conta?</label>
+      {{form.is_active}}
+  </div>
+
+      
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form> 
+{% endblock %}
+
+<!--
+Sua senha não pode ser muito parecida com o resto das suas informações pessoais.
+Sua senha precisa conter pelo menos 8 caracteres.
+Sua senha não pode ser uma senha comumente utilizada.
+Sua senha não pode ser inteiramente numérica.
+-->

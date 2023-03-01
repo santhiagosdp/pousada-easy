@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # 'livesync',
     'django.contrib.staticfiles',
     'core',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 '''STATICFILES_DIRS = (
    '/core/static/',
 )'''
+
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  # ou outro conjunto de templates
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

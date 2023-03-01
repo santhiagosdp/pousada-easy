@@ -4,6 +4,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from .forms import EditProfileForm
+
+
+
+
 from .models import Quarto, Hospede, Endereco, Reserva, Hospedes_reserva, Produto, Comanda_consumo, \
     Fechamento_conta, Reserva_pendente
 
@@ -17,6 +27,40 @@ def cadastrar_usuario(request):
     else:
         form_usuario = UserCreationForm()
     return render(request, 'core/cadastro.html', {'form_usuario': form_usuario})
+
+@login_required
+def change_password(request):
+    return PasswordChangeForm(
+        request,
+        template_name='registration/edit_user.html',
+        post_change_redirect='/'
+    )
+
+@login_required
+def edit_user(request):
+    user = request.user
+    if request.method == 'POST':
+        print("'111111request.method == 'POST':'")
+        form = UserChangeForm(request.POST, instance = user)
+        form_senha = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            print('222form.is_valid():')
+            user = form.save()
+            messages.success(request, 'Dados alterados com sucesso!')
+        if form_senha.is_valid():
+            print('3333form_senha.is_valid():')
+            user = form_senha.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')            
+            return redirect('/')
+        else:
+            print('444444444form_senha = PasswordChangeForm(request.user)')
+            form_senha = PasswordChangeForm(request.user)
+    else:
+        print('5555555form = UserChangeForm(instance=user)')
+        form = UserChangeForm(instance=user)
+        form_senha = PasswordChangeForm(request.user)
+    return render(request, 'registration/edit_user.html', {'form': form, 'form_senha' : form_senha })
 
 
 @login_required

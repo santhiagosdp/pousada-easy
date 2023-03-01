@@ -26,7 +26,7 @@
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container-fluid" style="border: 1 ; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);">
         <a class="navbar-brand" href="{% url 'home' %}">HOME</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
                         <li><a class="dropdown-item" href="{% url 'clientes' %}">Clientes</a></li>
                         <li><a class="dropdown-item" href="{% url 'quartos' %}">Quartos</a></li>
                         <li><a class="dropdown-item" href="{% url 'produtos' %}">Produtos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'edit_user' %}">Perfil</a></li>                        
                     </ul>
                 </li>
             </ul>

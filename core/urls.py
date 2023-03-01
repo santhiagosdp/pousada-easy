@@ -10,6 +10,8 @@ urlpatterns = [
 
     path('accounts/', include('django.contrib.auth.urls')),  # LOGIN
     path('accounts/logout', views.logout_view, name='logout'),  # LOGOUT
+    path('accounts/editar/perfil', views.edit_user, name='edit_user'),  # edit_user
+
     path('', views.home, name='home'),  # HOME
 
     path('cadastrar_usuario/', views.cadastrar_usuario, name='cadastrar_usuario'),
@@ -32,8 +34,7 @@ urlpatterns = [
 
     path('comandas/', views.comandas, name='comandas'),
     path('comanda/hospedagem/<id>', views.itenscomanda, name='itenscomanda'),
-    path('comanda/produto/delete/<idcomandaconsumo>/<idhospede>', views.comanda_produto_delete,
-         name='comanda_produto_delete'),
+    path('comanda/produto/delete/<idcomandaconsumo>/<idhospede>', views.comanda_produto_delete,name='comanda_produto_delete'),
 
     path('<path:unknown_path>', views.home),
 
