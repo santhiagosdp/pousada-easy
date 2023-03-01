@@ -30,5 +30,16 @@ git fetch
 
 
 
+pip3.10 install --user pythonanywhere
+
+pa_autoconfigure_django.py https://github.com/santhiagosdp/pousada-easy.git
+
+python manage.py migrate
+
+python manage.py createsuperuser
 
 
+########### atualizar
+cd ~/<your-pythonanywhere-domain>.pythonanywhere.com
+
+git pull
