@@ -24,9 +24,7 @@ python manage.py startapp core  ####primeira Aplicação
 
 python manage.py createsuperuser
 
-git reset
-
-git pull
+git fetch
 
 
 
