@@ -83,8 +83,7 @@
                 <select id="cliente" name="cliente" class="form-control" style="border: 2px solid blue;" required>
                     <option value="" class="text-center" disabled selected>Selecione</option>
                     {% for cliente in clientes %}
-                    <option value="{{ cliente.id }}">{{ cliente.nome }} - {{ cliente.endereco.cidade }}/{{
-                        cliente.endereco.estado }} - Telefone: {{ cliente.telefone }}
+                    <option value="{{ cliente.id }}">{{ cliente.nome }} - {{ cliente.endereco.cidade }}/{{cliente.endereco.estado }} - Telefone: {{ cliente.telefone }}
                     </option>
                     {% endfor %}
                 </select>
