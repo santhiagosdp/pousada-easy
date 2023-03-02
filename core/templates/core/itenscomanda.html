@@ -69,8 +69,8 @@
             <p for="checkout">
                 <strong>Checkout:</strong> {{ hospede_reserva.reserva.data_saida }}
             </p>
-            <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para {{
-                hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
+            <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para 
+                {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
             <p for="valor_hospedagem">
                 <strong>Valor da Hospedagem:</strong> R${{ hospede_reserva.reserva.valor|intcomma }}
             </p>
