@@ -166,16 +166,21 @@
             <tbody>
             {% for item in hospedes %}
             <tr>
-                <td>{{ item.nome }}</td>
-                <td>{{ item.cpf }}</td>
-                <td>{{ item.rg }}</td>
-                <td>{{ item.telefone }}</td>
-                <td>{{ item.email }}</td>
-                <td>{{ item.data_aniversario }}</td>
-                <td>{{ item.endereco.cidade }}/{{ item.endereco.estado }}</td>
-                <td>
-                    <a type="button" class="far fa-trash-alt" href="/cliente/delete/{{item.id}}"
-                       style="font-size:20px; color:#FF0000"></a>
+                <td style="white-space: nowrap;">{{ item.nome }}</td>
+                <td style="white-space: nowrap;">{{ item.cpf }}</td>
+                <td style="white-space: nowrap;">{{ item.rg }}</td>
+                <td style="white-space: nowrap;">{{ item.telefone }}</td>
+                <td style="white-space: nowrap;">{{ item.email }}</td>
+                <td style="white-space: nowrap;">{{ item.data_aniversario }}</td>
+                <td style="white-space: nowrap;">{{ item.endereco.cidade }}/{{ item.endereco.estado }}</td>
+                <td style="white-space: nowrap;">
+                    <!--<a type="button" class="far fa-trash-alt" href="/cliente/delete/{{item.id}}"
+                       style="font-size:20px; color:#FF0000"></a> -->
+                    <a type="button" class="btn btn-outline-danger" href="/cliente/delete/{{item.id}}">
+                        <span class="far fa-trash-alt"></span> Excluir</a>
+
+                    <a type="button" class="btn btn-outline-primary" href="/produto/edit/{{item.id}}">Editar</a>
+                    
                 </td>
             </tr>
             {% endfor %}

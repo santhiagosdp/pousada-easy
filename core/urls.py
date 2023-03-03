@@ -2,6 +2,7 @@
 from django.urls import path, include
 
 from core import views
+from django.contrib.auth import views as auth_views
 
 # from django.conf import settings
 
@@ -11,6 +12,15 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # LOGIN
     path('accounts/logout', views.logout_view, name='logout'),  # LOGOUT
     path('accounts/editar/perfil', views.edit_user, name='edit_user'),  # edit_user
+    path('accounts/editar/empresa', views.edit_empresa, name='edit_empresa'),  # edit_empresa
+
+
+    #REETAR SENHA
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
 
     path('', views.home, name='home'),  # HOME
 
@@ -20,10 +30,13 @@ urlpatterns = [
     path('cliente/delete/<id>', views.cliente_delete, name='cliente_delete'),
 
     path('quartos/', views.quartos, name='quartos'),
+    path('quarto/edit/<id>', views.quarto_edit, name='quarto_edit'),
     path('quarto/delete/<id>', views.quarto_delete, name='quarto_delete'),
 
     path('produtos/', views.produtos, name='produtos'),
     path('produto/delete/<id>', views.produto_delete, name='produto_delete'),
+    path('produto/edit/<id>', views.produto_edit, name='produto_edit'),
+
 
     path('reservar', views.reservar, name='reservar'),
     # path('reservando_dados/<id>', views.reservando_dados, name='reservando_dados'),

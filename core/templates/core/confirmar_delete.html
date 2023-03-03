@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+
+{%block content%}
+
+<div class="container">
+    <br>
+    <br>	
+    <br>
+	<form method="post" class="form-control text-center">
+		{% csrf_token %}
+        <h1>Confirmar exclusão {{ item }}</h1>
+        <br>
+        <a type="button" class="btn btn-secondary" href="/{{pagina_redirect}}/" style="width: 100px">Cancelar</a>
+
+		<button type="submit" class="btn btn-outline-success" style="width: 100px">Sim</button>       		
+	</form>
+</div>
+
+    
+{% endblock %}

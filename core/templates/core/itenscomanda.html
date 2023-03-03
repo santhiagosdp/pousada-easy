@@ -128,9 +128,8 @@
             <td>{{ item.produto.descricao }}</td>
             <td class="text-center">{{ item.produto.valor_venda|intcomma }}</td>
             <td>
-                <a type="button" class="far fa-trash-alt"
-                   href="/comanda/produto/delete/{{ item.id }}/{{ hospede_reserva.id }}"
-                   style="font-size:20px; color:#FF0000"></a>
+                <a type="button" class="btn btn-outline-danger" href="/comanda/produto/delete/{{ item.id }}/{{ hospede_reserva.id }}">
+                    <span class="far fa-trash-alt"></span>Excluir</a>
             </td>
         </tr>
         {% endfor %}
@@ -139,7 +138,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <th class="text-end">Valor Total: R${{valor_comanda|intcomma}}</th>
+            <th class="text-end">Valor Total: R$ {{valor_comanda|intcomma}}</th>
+            <td></td>
         </tr>
         </tbody>
     </table>

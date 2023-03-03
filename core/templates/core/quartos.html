@@ -86,8 +86,10 @@
                 <td>{{ item.capacidade }} Pessoas</td>
                 <td>{{ item.descricao }}</td>
                 <td>
-                    <a type="button" class="far fa-trash-alt" href="/quarto/delete/{{item.id}}"
-                       style="font-size:20px; color:#FF0000"></a>
+                    <a type="button" class="btn btn-outline-danger" href="/quarto/delete/{{item.id}}">
+                        <span class="far fa-trash-alt"></span>Excluir</a>
+
+                    <a type="button" class="btn btn-outline-primary" href="/quarto/edit/{{item.id}}">Editar</a>
                 </td>
             </tr>
             {% endfor %}

@@ -64,6 +64,12 @@ def edit_user(request):
 
 
 @login_required
+def edit_empresa(request):
+    
+    return render(request, 'core/home.html', {'titulo': 'Home'})
+
+
+@login_required
 def home(request, unknown_path=None):
     if unknown_path is not None:
         # Redireciona o usuário para a página inicial se a URL não existe
@@ -153,6 +159,35 @@ def quartos(request):
 
     return render(request, 'core/quartos.html', {'titulo': 'Quartos', 'quartos': quartos})
 
+@login_required
+def quarto_delete(request, id):
+    item = Quarto.objects.get(id = id, usuario = request.user)
+    if request.method == 'POST':
+        item.habilitado = False
+        item.save()
+        return redirect('quartos')
+    item = "do quarto: "+str(item.numero)+" - "+item.tipo
+    pagina_redirect = 'quartos'
+    return render(request, 'core/confirmar_delete.html', {'item': item, 'pagina_redirect':pagina_redirect})
+
+
+@login_required
+def quarto_edit(request, id):
+    quarto = Quarto.objects.get(id=id, usuario = request.user)
+
+    if request.method == 'POST':
+        quarto = Quarto.objects.get(id=id, usuario = request.user)
+        quarto.tipo=request.POST.get("tipo")
+        quarto.numero=request.POST.get("numero")
+        quarto.capacidade=request.POST.get("capacidade")
+        quarto.descricao=request.POST.get("descricao")
+        quarto.save()   
+
+        return redirect('quartos')
+        #####  FIM DO CADASTRO DO QUARTO
+
+    return render(request, 'core/edicao/edit_quarto.html', {'titulo': 'Editar Quarto', 'quarto': quarto})
+
 
 @login_required
 def produtos(request):
@@ -180,6 +215,39 @@ def produtos(request):
     ####### FIM DO BUSCAR
 
     return render(request, 'core/produtos.html', {'titulo': 'Produtos', 'produtos': produtos})
+
+@login_required
+def produto_edit(request, id):
+    produto = Produto.objects.get(id=id, usuario = request.user)
+    produto.valor_custo = str(produto.valor_custo).replace(",", ".")
+    produto.valor_venda =str(produto.valor_venda).replace(",", ".")
+
+    if request.method == 'POST':
+        #produto = Quarto.objects.get(id=id, usuario = request.user)
+        produto.nome = request.POST.get("nome").upper()
+        produto.descricao = request.POST.get("descricao").upper()
+        produto.valor_custo = request.POST.get("valor_custo").replace(",", ".")
+        produto.valor_venda = request.POST.get("valor_venda").replace(",", ".") 
+        produto.save()
+
+        return redirect('produtos')
+        #####  FIM DA ATUALIZAÇÃO DE PRODUTOS
+
+    return render(request, 'core/edicao/edit_produto.html', {'titulo': 'Editar Produto', 'produto': produto})
+
+@login_required
+def produto_delete(request, id):
+    item = Produto.objects.get(id=id)
+    if request.method == 'POST':
+        # Aqui você pode fazer a exclusão do item
+        item.habilitado = False
+        item.save()
+        return redirect('produtos')
+    
+    item = "Produto nome: "+item.nome
+    pagina_redirect = 'produtos'
+    return render(request, 'core/confirmar_delete.html', {'item': item, 'pagina_redirect':pagina_redirect})
+
 
 
 @login_required
@@ -252,26 +320,15 @@ def itenscomanda(request, id):
 
 @login_required
 def cliente_delete(request, id):
-    desabilitar = Hospede.objects.get(id=id)
-    desabilitar.habilitado = False
-    desabilitar.save()
-    return redirect('clientes')
-
-
-@login_required
-def quarto_delete(request, id):
-    desabilitar = Quarto.objects.get(id=id)
-    desabilitar.habilitado = False
-    desabilitar.save()
-    return redirect('quartos')
-
-
-@login_required
-def produto_delete(request, id):
-    desabilitar = Produto.objects.get(id=id)
-    desabilitar.habilitado = False
-    desabilitar.save()
-    return redirect('produtos')
+    item = Hospede.objects.get(id = id, usuario = request.user)
+    if request.method == 'POST':
+        # Aqui você pode fazer a exclusão do item
+        item.habilitado = False
+        item.save()
+        return redirect('clientes')
+    item = "do cliente: "+item.nome
+    pagina_redirect = 'clientes'
+    return render(request, 'core/confirmar_delete.html', {'item': item, 'pagina_redirect':pagina_redirect})
 
 
 @login_required
@@ -341,13 +398,9 @@ def hospedagem_concluir(request, id):
     for comanda in desabilitar:
         comanda.habilitado = False
         comanda.save()
-    # deletando os fechamento_conta
-    # desabilitar = Fechamento_conta.objects.filter(usuario = request.user, hospedes_reserva = hospede_reserva)
-    # for fechamento in desabilitar:
-    # fechamento.habilitado = False
-    # fechamento.save()
 
     return redirect('disponibilidade')
+
 
 
 @login_required

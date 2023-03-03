@@ -1,147 +1,135 @@
 {% extends 'base/base.html' %}
 {% load humanize %}
 
-
 {% block content %}
+  <style>
+    .botao2 {
+      background-color: blue;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .botao-lixo {
+      background-color: red;
+      color: white;
+      padding: 8px 8px;
+      border-radius: 5px;
+      border: none;
+      text-decoration: none;
+    }
+    .botao-ok {
+      background-color: blue;
+      color: white;
+      padding: 5px 5px;
+      border-radius: 5px;
+      border: none;
+      text-decoration: none;
+    }
+  </style>
 
-<style>
-  .botao2 {
-    background-color: blue;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-}
-  .botao-lixo{
-    background-color: red;
-    color: white;
-    padding: 8px 8px;
-    border-radius: 5px;
-    border: none;
-    text-decoration: none;
-}
-.botao-ok{
-    background-color: blue;
-    color: white;
-    padding: 5px 5px;
-    border-radius: 5px;
-    border: none;
-    text-decoration: none;
-}
+  <h1 class="titulo_centro">Reservas</h1>
 
-
-</style>
-
-
-<h1 class="titulo_centro">Reservas</h1>
-
-<form method="get" id="search-form" class="form-inline">
+  <form method="get" id="search-form" class="form-inline">
     <!-- {% csrf_token %} -->
     <div class="row">
-        <div class="col-md-2">
-            <label for="numero_quarto" class="form-label">Número do Quarto</label>
-            <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto"
-                   aria-describedby="numero_quarto"/>
-            <div class="form-text"></div>
-        </div>
+      <div class="col-md-2">
+        <label for="numero_quarto" class="form-label">Número do Quarto</label>
+        <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
+        <div class="form-text"></div>
+      </div>
 
-        <div class="col-md-6">
-            <label for="hospede" class="form-label">Nome do Hospede</label>
-            <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" disabled/>
-            <div class="form-text"></div>
-        </div>
+      <div class="col-md-6">
+        <label for="hospede" class="form-label">Nome do Hospede</label>
+        <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" disabled />
+        <div class="form-text"></div>
+      </div>
 
-        <div class="col-auto">
-            <label for="check-in" class="form-label">Data de check-in</label>
-            <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled/>
-            <div id="check-in" class="form-text"></div>
-        </div>
+      <div class="col-auto">
+        <label for="check-in" class="form-label">Data de check-in</label>
+        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled />
+        <div id="check-in" class="form-text"></div>
+      </div>
 
-        <div class="col-auto">
-            <label for="check-out" class="form-label">Data de check-out</label>
-            <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out"
-                   disabled/>
-            <div id="check-out" class="form-text"></div>
-        </div>
+      <div class="col-auto">
+        <label for="check-out" class="form-label">Data de check-out</label>
+        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
+        <div id="check-out" class="form-text"></div>
+      </div>
     </div>
     <div class="row botao_centro">
-        <div class="col">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-        </div>
+      <div class="col">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </div>
     </div>
-</form>
-<form method="get" id="concluido" class="form-inline">
+  </form>
+  <form method="get" id="concluido" class="form-inline">
     <div class="row text-end">
-        <div class="col">
-            <input name="status" class="form-control" value="concluidos" type="hidden"/>
-            <button type="submit" class="btn btn-success" title="Hospedagens Concluidas">Concluidos</button>
-        </div>
+      <div class="col">
+        <input name="status" class="form-control" value="concluidos" type="hidden" />
+        <button type="submit" class="btn btn-success" title="Hospedagens Concluidas">Concluidos</button>
+      </div>
     </div>
-</form>
+  </form>
 
-<br/>
-<div class="row">
+  <br />
+  <div class="row col-auto">
     <table class="table" id="tabela-produtos">
-        <thead>
+      <thead>
         <tr>
-            <th class="ordenavel">Checkin</th>
-            <th class="ordenavel">Quarto</th>
-            <th class="ordenavel">Hospede</th>
-            <th class="ordenavel">Check-in</th>
-            <th class="ordenavel">Check-out</th>
-            <th class="ordenavel">Diárias</th>
-            <th class="ordenavel">Status</th>
-            <th class="ordenavel">Valor Diarias</th>
-            <th class="ordenavel">Valor Comanda</th>
-            <th class="ordenavel">Valor Total</th>
-            <th>#</th>
+          <th class="ordenavel" style="white-space: nowrap;">ENTRADA</th>
+          <th class="ordenavel" style="white-space: nowrap;">QUARTO</th>
+          <th class="ordenavel" style="white-space: nowrap;">HÓSPEDE</th>
+          <th class="ordenavel" style="white-space: nowrap;">CHECK-IN</th>
+          <th class="ordenavel" style="white-space: nowrap;">CHECK-OUT</th>
+          <th class="ordenavel" style="white-space: nowrap;">DIÁRIAS</th>
+          <th class="ordenavel" style="white-space: nowrap;">STATUS</th>
+          <th class="ordenavel" style="white-space: nowrap;">VALOR DIÁRIAS</th>
+          <th class="ordenavel" style="white-space: nowrap;">VALOR COMANDA</th>
+          <th class="ordenavel" style="white-space: nowrap;">VALOR TOTAL</th>
+          <th>FINALIZAR</th>
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         {% for item in hospedados %}
-        <tr>
-            <td>
-                <a type="button" class="botao-ok" href="/hospedagem/checkin/{{item.id}}"
-                   title="Fazer Check-in">Check-in</a>
+          <tr>
+            <td style="white-space: nowrap;">
+              <a type="button" class="btn btn-outline-primary" href="/hospedagem/checkin/{{ item.id }}" title="Fazer Check-in">Check-in</a>
             </td>
-            <td>{{ item.reserva.quarto.numero }}</td>
-            <td>{{ item.hospede.nome }}</td>
-            <td>{{ item.reserva.data_entrada }}</td>
-            <td>{{ item.reserva.data_saida }}</td>
-            <td>{{ item.reserva.diarias }}</td>
+            <td style="white-space: nowrap;">{{ item.reserva.quarto.numero }}</td>
+            <td style="white-space: nowrap;">{{ item.hospede.nome }}</td>
+            <td style="white-space: nowrap;">{{ item.reserva.data_entrada }}</td>
+            <td style="white-space: nowrap;">{{ item.reserva.data_saida }}</td>
+            <td style="white-space: nowrap;">{{ item.reserva.diarias }}</td>
 
-            <!-- RESERVADOS - SEM COR -->  <!-- SE NÃO TIVER NO DIA DO CHECKIN -->
+            <!-- RESERVADOS - SEM COR --> <!-- SE NÃO TIVER NO DIA DO CHECKIN -->
             {% if item.reserva.data_entrada > hoje %}
-            <td>{{item.status}}</td>
+              <td style="white-space: nowrap;">{{ item.status }}</td>
             {% endif %}
 
-            <!-- HOSPEDADOS - AZUL  -->
+            <!-- HOSPEDADOS - AZUL -->
             {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
-            <td style="background-color: LightSteelBlue; color: white">{{item.status}}</td>
+              <td style="background-color: LightSteelBlue; color: white;  white-space: nowrap;"">{{ item.status }}</td>
             {% endif %}
 
-            <!-- HOSPEDADOS - SAINDO HOJE - AZUL  -->
+            <!-- HOSPEDADOS - SAINDO HOJE - AZUL -->
             {% if item.reserva.data_saida == hoje %}
-            <td style="background-color: LightSteelBlue; color: white"> {{item.status}}</td>
+              <td style="background-color: LightSteelBlue; color: white;  white-space: nowrap;">{{ item.status }}</td>
             {% endif %}
 
-            <!-- ENCERRADOS - VERMELHO  -->
+            <!-- ENCERRADOS - VERMELHO -->
             {% if item.reserva.data_saida < hoje %}
-            <td style="background-color: OrangeRed; color: white">{{item.status}}</td>
+              <td style="background-color: OrangeRed; color: white;  white-space: nowrap;">{{ item.status }}</td>
             {% endif %}
-            <td>{{ item.reserva.valor|intcomma}}</td>
-            <td>{{item.valor_comanda|intcomma}}</td>
-            <td>{{item.valor_total|intcomma}}</td>
-            <td>                
-                <a type="button" class="botao-ok" href="/hospedagem/concluir/{{item.id}}" title="Fazer Check-out">Check-out</a>
-                <a type="button" class="far fa-trash-alt botao-lixo" href="/hospedagem/delete/{{item.id}}"
-                   title="deletar"></a>
+            <td style="white-space: nowrap;">{{ item.reserva.valor|intcomma }}</td>
+            <td style="white-space: nowrap;">{{ item.valor_comanda|intcomma }}</td>
+            <td style="white-space: nowrap;">{{ item.valor_total|intcomma }}</td>
+            <td style="white-space: nowrap;">
+              <a type="button" class="btn btn-outline-danger" href="/hospedagem/delete/{{ item.id }}" title="deletar"><span class="far fa-trash-alt"></span>Excluir</a>
+              <a type="button" class="btn btn-outline-success" href="/hospedagem/concluir/{{ item.id }}" title="Fazer Check-out">Check-out</a>
             </td>
-        </tr>
+          </tr>
         {% endfor %}
-        </tbody>
+      </tbody>
     </table>
-</div>
+  </div>
 {% endblock %}
-
-
-
