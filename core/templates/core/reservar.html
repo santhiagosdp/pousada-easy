@@ -1,7 +1,16 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-
+<style>
+/* Define a cor de fundo para quartos disponíveis */
+    .Disponivel {
+      background-color: greenyellow;
+    }
+    /* Define a cor de fundo para quartos ocupados */
+    .Reservado {
+      background-color: red;
+    }
+  </style>
 
 <h1 class="titulo_centro">Reservar Quarto</h1>
 
@@ -50,7 +59,15 @@
 {% if pagina == 'quartos' %}
 
 <div class="row">
-    <div class="col-md-10"></div>
+    <div class="col-md-3">
+        <form method="get" id="search-form" class="form-inline">
+            <div class="input-group mb-3">
+                <input class="form-control" type="date" name="data_inicio" id="data_inicio"/>
+                <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6"></div>
     <div class="col-md-1">
         <a class="btn btn-outline-success" href="{% url 'clientes' %}" style="width: 100%">+Cliente</a>
     </div>
@@ -62,7 +79,7 @@
 </div>
 <p></p>
 
-{% for item in quartos %}
+{% for item in quartos_disponiveis %}
 <form method="post">
     {% csrf_token %}
     <div class="row alert alert-primary">
@@ -102,7 +119,37 @@
 {% endfor %}
 {% endif %}
 
-{% if pagina == 'dados_reserva' %}
-<h4>dados_reserva</h4>
-{% endif %}
+
+<div id="linha_horizontal"></div>
+<br>
+<div class="row col-auto">
+    
+    <h1 class="text-center">Calendário de ocupação dos quartos</h1>
+<br>
+
+
+    <table>
+      <thead>
+        <tr>
+            <th class="ordenavel text-center">DATA</th>
+          {% for item in quartos %}
+            <th class="ordenavel text-center">SUITE {{item.numero}}</th>
+          {% endfor %}
+        </tr>
+
+      </thead>
+      <tbody>
+        {% for item in lista_disponibilidade %}
+        <tr style="border: 1px solid black;">
+            <th class="{{quarto.status}} text-center">{{item.data}}</th>
+          {% for quarto in item.quartos %}
+            <td class="{{quarto.status}} text-center">{{quarto.status}}<br>{{quarto.numero}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
 {% endblock %}

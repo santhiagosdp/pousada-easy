@@ -389,15 +389,15 @@ def hospedagem_concluir(request, id):
     hospede_reserva.save()
 
     # Deletando Reserva
-    Reserva = hospede_reserva.reserva
-    Reserva.habilitado = False
-    Reserva.save()
+    #Reserva = hospede_reserva.reserva
+    #Reserva.habilitado = False
+    #Reserva.save()
 
     # deletando as comandas
-    desabilitar = Comanda_consumo.objects.filter(usuario=request.user, hospedes_reserva=hospede_reserva)
-    for comanda in desabilitar:
-        comanda.habilitado = False
-        comanda.save()
+    #desabilitar = Comanda_consumo.objects.filter(usuario=request.user, hospedes_reserva=hospede_reserva)
+    #for comanda in desabilitar:
+    #    comanda.habilitado = False
+    #    comanda.save()
 
     return redirect('disponibilidade')
 
@@ -416,19 +416,32 @@ def reservar(request):
     checkout = request.GET.get('checkout')
     quantidade_hospedes = request.GET.get('quantidade_hospedes')
     id_quarto = request.GET.get('id_quarto')
+    data_atual = datetime.today().date()
+    print(type(data_atual))
+    print('######################################')
+    print('######################################')
+    print('######################################')
+    data_inicio_str = request.GET.get('data_inicio')
+   
+    if data_inicio_str:
+        data_inicio = datetime.strptime(data_inicio_str,'%Y-%m-%d')  # converte string para datetime
+        data_fim = data_inicio + timedelta(days=30)
+        data_fim = data_fim.strftime('%Y-%m-%d')
+    else:
+        data_inicio = data_atual #.strftime('%Y-%m-%d')
+        data_fim = data_atual + timedelta(days=30)
+        data_fim = data_fim.strftime('%Y-%m-%d')
 
-    if request.method == 'POST':  #### cadastrar a reserva confirmada
-        # print("METODO POST")
-        # print("#########################POST")
-        # print(request.POST.get("valortotal"))
-        # print(float(request.POST.get("valortotal")))
 
+    
+
+    if request.method == 'POST':
         pendente = Reserva_pendente.objects.get(
             usuario=request.user
         )
         quarto = Quarto.objects.get(
             id=request.POST.get("id_quarto"),
-            usuario=request.user,
+            usuario=request.user
         )
         ## criando reserva confirmada   
         reserva = Reserva.objects.create(
@@ -460,9 +473,7 @@ def reservar(request):
         pendente.delete()
         ###############
 
-        return redirect('disponibilidade')  # pagina de confirmação
-
-
+        return redirect('reservar')  # pagina de confirmação
 
     else:
         if checkin and checkout and quantidade_hospedes:
@@ -545,14 +556,55 @@ def reservar(request):
                 res_pendente.save()
                 ######### fim criar reserva pendente
 
-        else:
-            if id_quarto:  # GET QUARTO 
+        if data_inicio and data_fim:
+            ###  TABELA DE DISPONIBILIDADE
+            lista_quartos = Quarto.objects.filter(usuario = request.user, habilitado = True)
+            #print(lista_quartos)
+            
+            lista_disponibilidade = []
+            if data_inicio_str:
+                data_inicio = data_inicio.date()  # datetime.strptime(data_inicio, "%Y-%m-%d").date()
+            else:
+                data_inicio = data_inicio # datetime.strptime("%Y-%m-%d", str(data_inicio).date()
 
-                context = {'clientes': clientes, 'titulo': "Reservar Quarto", "pagina": "dados_reserva"}
-                return render(request, 'core/reservar.html', context)
+            data_fim = datetime.strptime(data_fim, "%Y-%m-%d").date()
+            lista_datas = []  #lista com datas
+            while data_inicio < data_fim:
+                lista_datas.append(data_inicio)
+                data_inicio = data_inicio + timedelta(1)
+            lista_reservas = Reserva.objects.filter(usuario = request.user, habilitado = True)
+            
+            for data in lista_datas:
+                #lista_disponibilidade.append({"data":data})
+                quartos = []
+                for quarto in lista_quartos:
+                    achou = False
+                    for reserva in lista_reservas:
+                        if reserva.quarto.id == quarto.id:                    
+                            data_inicio = reserva.data_entrada
+                            data_fim = reserva.data_saida
+                            datas_reservas = []
 
-    context = {"clientes": clientes, 'titulo': "Reservar Quarto", 'quartos': quartos_disponiveis, "pagina": "quartos",
-               "pendente": res_pendente}
+                            while data_inicio <= data_fim:                        
+                                datas_reservas.append(data_inicio)
+                                data_inicio = data_inicio + timedelta(1)
+
+                            for data_reserva in datas_reservas:
+                                if data_reserva == data:                            
+                                    quartos.append({"numero":quarto.numero, "status":"Reservado"})
+                                    achou = True
+                    if achou == False:
+                        quartos.append({"numero":quarto.numero, "status":"Disponivel"})
+                lista_disponibilidade.append({"data":data, 'quartos':quartos})
+        
+    context = {"clientes": clientes,
+               'titulo': "Reservar Quarto",
+               'quartos_disponiveis': quartos_disponiveis,
+               "pagina": "quartos",
+               "pendente": res_pendente,
+               "lista_disponibilidade":lista_disponibilidade,
+               "quartos":quartos
+               }
     return render(request, 'core/reservar.html', context)
 
 
@@ -560,7 +612,6 @@ def reservar(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-
 
 @login_required
 def disponibilidade(request):
@@ -604,8 +655,10 @@ def disponibilidade(request):
 
     # ordenando pela data de entrada checkin
     hospedados = sorted(hospedados, key=lambda x: x.reserva.data_entrada)
+
+   
     context = {'titulo': 'Reservas Feitas',
                'hospedados': hospedados,
-               'hoje': datetime.now().strftime('%Y/%m/%d')
+               'hoje': date.today().strftime('%Y/%m/%d'),
                }
     return render(request, 'core/disponibilidade.html', context)

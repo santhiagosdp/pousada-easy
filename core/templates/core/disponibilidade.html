@@ -25,6 +25,15 @@
       border: none;
       text-decoration: none;
     }
+    /* Define a cor de fundo para quartos disponíveis */
+    .Disponivel {
+      background-color: greenyellow;
+    }
+    /* Define a cor de fundo para quartos ocupados */
+    .Reservado {
+      background-color: red;
+      border: 1px solid black;
+    }
   </style>
 
   <h1 class="titulo_centro">Reservas</h1>
@@ -62,6 +71,7 @@
       </div>
     </div>
   </form>
+
   <form method="get" id="concluido" class="form-inline">
     <div class="row text-end">
       <div class="col">
@@ -83,9 +93,9 @@
           <th class="ordenavel" style="white-space: nowrap;">CHECK-OUT</th>
           <th class="ordenavel" style="white-space: nowrap;">DIÁRIAS</th>
           <th class="ordenavel" style="white-space: nowrap;">STATUS</th>
-          <th class="ordenavel" style="white-space: nowrap;">VALOR DIÁRIAS</th>
-          <th class="ordenavel" style="white-space: nowrap;">VALOR COMANDA</th>
-          <th class="ordenavel" style="white-space: nowrap;">VALOR TOTAL</th>
+          <th class="ordenavel" >VALOR DIÁRIAS</th>
+          <th class="ordenavel" >VALOR COMANDA</th>
+          <th class="ordenavel" >VALOR TOTAL</th>
           <th>FINALIZAR</th>
         </tr>
       </thead>
@@ -108,17 +118,17 @@
 
             <!-- HOSPEDADOS - AZUL -->
             {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
-              <td style="background-color: LightSteelBlue; color: white;  white-space: nowrap;"">{{ item.status }}</td>
+              <td style="background-color: LightSteelBlue; color: white; white-space: nowrap">{{ item.status }}</td>
             {% endif %}
 
             <!-- HOSPEDADOS - SAINDO HOJE - AZUL -->
             {% if item.reserva.data_saida == hoje %}
-              <td style="background-color: LightSteelBlue; color: white;  white-space: nowrap;">{{ item.status }}</td>
+            <td style="background-color: LightSteelBlue; color: white; white-space: nowrap">{{ item.status }}</td>
             {% endif %}
 
             <!-- ENCERRADOS - VERMELHO -->
             {% if item.reserva.data_saida < hoje %}
-              <td style="background-color: OrangeRed; color: white;  white-space: nowrap;">{{ item.status }}</td>
+              <td style="background-color: OrangeRed; color: white; white-space: nowrap">{{ item.status }}</td>
             {% endif %}
             <td style="white-space: nowrap;">{{ item.reserva.valor|intcomma }}</td>
             <td style="white-space: nowrap;">{{ item.valor_comanda|intcomma }}</td>
@@ -132,4 +142,10 @@
       </tbody>
     </table>
   </div>
+
 {% endblock %}
+
+
+
+
+            

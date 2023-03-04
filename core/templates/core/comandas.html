@@ -2,17 +2,6 @@
 
 {% block content %}
 <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
-    .container2 {
-      background-color: #f2f2f2;
-      max-width: auto;
-      margin: auto;
-      border-radius: 5px;
-      margin-top: 5px;
-    }
     .card2 {
       border-radius: 10px;
       text-align: center;
@@ -45,10 +34,9 @@
       text-decoration: none;
       color:blue;
     }
-
 </style>
 
-<div class="container2">
+<div>
     <h3>Comandas das reservas em hospedagem</h3>
     <div class="row">
         {% for item in hospedados %}
@@ -66,7 +54,7 @@
     </div>
 </div>
 
-<div class="container2">
+<div>
     <h3 class="red">Comandas Pendente Fechamento</h3>
     <div class="row">
         {% for item in abertos %}
