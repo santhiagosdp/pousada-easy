@@ -60,15 +60,24 @@
         {% if pagina == 'quartos' %}
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-7">
                     <form method="get" id="search-form" class="form-inline">
-                        <div class="input-group mb-3">
-                            <input class="form-control" type="date" name="data_inicio" id="data_inicio"/>
-                            <button class="btn btn-outline-success" id="search" type="submit">Consultar ocupação</button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group mb-3">                            
+                                    <input class="form-control" type="date" name="data_inicio" id="data_inicio">
+                                    <button class="btn btn-outline-success" id="search" type="submit">Consultar ocupação</button>                                    
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <input class="form-control" type="number" min="5" max="365" name="tempo" id="tempo">
+                                <label for="tempo" >Tempo ( 5 - 365 dias)</label>
+
+                            </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6"></div>
+                <div class="col-md-3"></div>
                 <div class="col-md-1">
                     <a class="btn btn-outline-success" href="{% url 'clientes' %}" style="width: 100%">+Cliente</a>
                 </div>

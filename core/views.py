@@ -419,19 +419,20 @@ def reservar(request):
     quantidade_hospedes = request.GET.get('quantidade_hospedes')
     id_quarto = request.GET.get('id_quarto')
     data_atual = datetime.today().date()
-    print(type(data_atual))
-    print('######################################')
-    print('######################################')
-    print('######################################')
     data_inicio_str = request.GET.get('data_inicio')
+    tempo = request.GET.get('tempo')
    
     if data_inicio_str:
         data_inicio = datetime.strptime(data_inicio_str,'%Y-%m-%d')  # converte string para datetime
-        data_fim = data_inicio + timedelta(days=15)
+        data_fim = data_inicio + timedelta(days=15)        
+        if tempo:
+            data_fim = data_inicio + timedelta(days=int(tempo))
         data_fim = data_fim.strftime('%Y-%m-%d')
     else:
         data_inicio = data_atual #.strftime('%Y-%m-%d')
         data_fim = data_atual + timedelta(days=15)
+        if tempo:
+            data_fim = data_atual + timedelta(days=int(tempo))
         data_fim = data_fim.strftime('%Y-%m-%d')
 
 
