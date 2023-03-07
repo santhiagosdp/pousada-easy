@@ -427,11 +427,11 @@ def reservar(request):
    
     if data_inicio_str:
         data_inicio = datetime.strptime(data_inicio_str,'%Y-%m-%d')  # converte string para datetime
-        data_fim = data_inicio + timedelta(days=30)
+        data_fim = data_inicio + timedelta(days=15)
         data_fim = data_fim.strftime('%Y-%m-%d')
     else:
         data_inicio = data_atual #.strftime('%Y-%m-%d')
-        data_fim = data_atual + timedelta(days=30)
+        data_fim = data_atual + timedelta(days=15)
         data_fim = data_fim.strftime('%Y-%m-%d')
 
 
@@ -597,6 +597,9 @@ def reservar(request):
                                     achou = True
                     if achou == False:
                         quartos.append({"numero":quarto.numero, "status":"Disponivel"})
+                        #ordena quartos pelo número
+                    
+                quartos = sorted(quartos, key=lambda q: q["numero"])
                 lista_disponibilidade.append({"data":data, 'quartos':quartos})
         
     context = {"clientes": clientes,
