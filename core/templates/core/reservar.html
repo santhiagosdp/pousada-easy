@@ -135,7 +135,7 @@
                 <tr>
                     <th class="ordenavel text-center">DATA</th>
                 {% for item in quartos %}
-                    <th class="ordenavel text-center">SUITE {{item.numero}}</th>
+                    <th class="ordenavel text-center">CHALÉ {{item.numero}}</th>
                 {% endfor %}
                 </tr>
 
@@ -143,7 +143,7 @@
             <tbody>
                 {% for item in lista_disponibilidade %}
                 <tr style="border: 1px solid black;">
-                    <th class="{{quarto.status}} text-center">{{item.data}}</th>
+                    <th class="text-center">{{item.data}}</th>
                 {% for quarto in item.quartos %}
                     <td class="{{quarto.status}} text-center">{{quarto.status}}<br>{{quarto.numero}}</td>
                 {% endfor %}
