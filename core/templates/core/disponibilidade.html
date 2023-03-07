@@ -36,53 +36,54 @@
     }
   </style>
 
-  <h1 class="titulo_centro">Reservas</h1>
+  <div class="container" style="margin-top: 100px;">
+    <h1 class="titulo_centro">Reservas</h1>
 
-  <form method="get" id="search-form" class="form-inline">
-    <!-- {% csrf_token %} -->
-    <div class="row">
-      <div class="col-md-2">
-        <label for="numero_quarto" class="form-label">Número do Quarto</label>
-        <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
-        <div class="form-text"></div>
-      </div>
+    <form method="get" id="search-form" class="form-inline">
+      <!-- {% csrf_token %} -->
+      <div class="row">
+        <div class="col-md-2">
+          <label for="numero_quarto" class="form-label">Número do Quarto</label>
+          <input name="quarto" type="number" class="form-control mr-sm-2" id="numero_quarto" aria-describedby="numero_quarto" />
+          <div class="form-text"></div>
+        </div>
 
-      <div class="col-md-6">
-        <label for="hospede" class="form-label">Nome do Hospede</label>
-        <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" disabled />
-        <div class="form-text"></div>
-      </div>
+        <div class="col-md-6">
+          <label for="hospede" class="form-label">Nome do Hospede</label>
+          <input name="hospede" type="text" class="form-control" id="hospede" aria-describedby="hospede" disabled />
+          <div class="form-text"></div>
+        </div>
 
-      <div class="col-auto">
-        <label for="check-in" class="form-label">Data de check-in</label>
-        <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled />
-        <div id="check-in" class="form-text"></div>
-      </div>
+        <div class="col-auto">
+          <label for="check-in" class="form-label">Data de check-in</label>
+          <input name="checkin" type="date" class="form-control" id="check-in" aria-describedby="check-in" disabled />
+          <div id="check-in" class="form-text"></div>
+        </div>
 
-      <div class="col-auto">
-        <label for="check-out" class="form-label">Data de check-out</label>
-        <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
-        <div id="check-out" class="form-text"></div>
+        <div class="col-auto">
+          <label for="check-out" class="form-label">Data de check-out</label>
+          <input name="checkout" type="date" class="form-control" id="check-out" aria-describedby="check-out" disabled />
+          <div id="check-out" class="form-text"></div>
+        </div>
       </div>
-    </div>
-    <div class="row botao_centro">
-      <div class="col">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+      <div class="row botao_centro">
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <form method="get" id="concluido" class="form-inline">
-    <div class="row text-end">
-      <div class="col">
-        <input name="status" class="form-control" value="concluidos" type="hidden" />
-        <button type="submit" class="btn btn-success" title="Hospedagens Concluidas">Concluidos</button>
+    <form method="get" id="concluido" class="form-inline">
+      <div class="row text-end">
+        <div class="col">
+          <input name="status" class="form-control" value="concluidos" type="hidden" />
+          <button type="submit" class="btn btn-success" title="Hospedagens Concluidas">Concluidos</button>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <br />
-  <div class="row col-auto">
+    <br />
+  </div>
     <table class="table" id="tabela-produtos">
       <thead>
         <tr>
@@ -101,7 +102,26 @@
       </thead>
       <tbody>
         {% for item in hospedados %}
-          <tr>
+          <!-- RESERVADOS - SEM COR --> <!-- SE NÃO TIVER NO DIA DO CHECKIN -->
+          {% if item.reserva.data_entrada > hoje %}
+          <tr style="color: black">
+          {% endif %}
+
+            <!-- HOSPEDADOS - AZUL -->
+          {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
+          <tr style="color: blue">
+          {% endif %}
+
+           <!-- HOSPEDADOS - SAINDO HOJE - AZUL -->
+           {% if item.reserva.data_saida == hoje %}
+           <tr style="color: Blue">
+           {% endif %}
+
+           <!-- ENCERRADOS - VERMELHO -->
+           {% if item.reserva.data_saida < hoje %}
+           <tr style="color: OrangeRed">
+           {% endif %}
+
             <td style="white-space: nowrap;">
               <a type="button" class="btn btn-outline-primary" href="/hospedagem/checkin/{{ item.id }}" title="Fazer Check-in">Check-in</a>
             </td>
@@ -110,26 +130,7 @@
             <td style="white-space: nowrap;">{{ item.reserva.data_entrada }}</td>
             <td style="white-space: nowrap;">{{ item.reserva.data_saida }}</td>
             <td style="white-space: nowrap;">{{ item.reserva.diarias }}</td>
-
-            <!-- RESERVADOS - SEM COR --> <!-- SE NÃO TIVER NO DIA DO CHECKIN -->
-            {% if item.reserva.data_entrada > hoje %}
-              <td style="white-space: nowrap;">{{ item.status }}</td>
-            {% endif %}
-
-            <!-- HOSPEDADOS - AZUL -->
-            {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
-              <td style="background-color: LightSteelBlue; color: white; white-space: nowrap">{{ item.status }}</td>
-            {% endif %}
-
-            <!-- HOSPEDADOS - SAINDO HOJE - AZUL -->
-            {% if item.reserva.data_saida == hoje %}
-            <td style="background-color: LightSteelBlue; color: white; white-space: nowrap">{{ item.status }}</td>
-            {% endif %}
-
-            <!-- ENCERRADOS - VERMELHO -->
-            {% if item.reserva.data_saida < hoje %}
-              <td style="background-color: OrangeRed; color: white; white-space: nowrap">{{ item.status }}</td>
-            {% endif %}
+            <td style="white-space: nowrap;">{{ item.status }}</td>
             <td style="white-space: nowrap;">{{ item.reserva.valor|intcomma }}</td>
             <td style="white-space: nowrap;">{{ item.valor_comanda|intcomma }}</td>
             <td style="white-space: nowrap;">{{ item.valor_total|intcomma }}</td>
@@ -141,8 +142,6 @@
         {% endfor %}
       </tbody>
     </table>
-  </div>
-
 {% endblock %}
 
 

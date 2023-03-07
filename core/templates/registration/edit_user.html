@@ -1,56 +1,79 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-  <h1>Editar usuário</h1>
-  <form method="POST">
-    {% csrf_token %}
-    <div class="form-group">{{ form.username.label_tag }}
-      {{ form.username }}</div>
+  <div class="container" style="margin-top: 80px;">
+    <h3>Editar usuário</h3>
 
-    <div class="form-group">{{ form.first_name.label_tag }}
-      {{ form.first_name }}</div>
-    <div class="form-group">{{ form.last_name.label_tag }}
-      {{ form.last_name }}</div>
-    <div class="form-group">{{ form.email.label_tag }}
-      {{ form.email }}</div>
+    <form method="POST" class="form-control">
+      {% csrf_token %}
 
-    <div class="form-group">
-      {{ form_senha.old_password.errors }}
-      <label>Senha antiga:</label>
-      {{ form_senha.old_password }}
-    </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">{{ form.username.label_tag }}
+            {{ form.username }}</div>
+          <p>Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.</p>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">{{ form.email.label_tag }}
+            {{ form.email }}</div>
+        </div>
+      </div>
 
-    <div class="form-group">
-      {{ form_senha.new_password1.errors }}
-      <label>Nova senha:</label>
-      {{ form_senha.new_password1 }}
-    </div>
-    
-    <h6>ATENÇÃO</h6>
-    <h6>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</h6>
-    <h6>Sua senha precisa conter pelo menos 8 caracteres.</h6>
-    <h6>Sua senha não pode ser uma senha comumente utilizada.</h6>
-    <h6>Sua senha não pode ser inteiramente numérica.</h6>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group">{{ form.first_name.label_tag }}
+            {{ form.first_name }}</div>
+        </div>
 
-    <div class="form-group">
-      {{ form_senha.new_password2.errors }}
-      <label>Confirmação de senha:</label>
-      {{ form_senha.new_password2 }}
-    </div>
-    <br />
-    <div class="form-group">
-      {{ form_senha.is_active.errors }}
-      <label>Desmarque para cancelar conta?</label>
-      {{ form.is_active }}
-    </div>
+        <div class="col-sm-6">
+          <div class="form-group">{{ form.last_name.label_tag }}
+            {{ form.last_name }}</div>
+        </div>
+      </div>
+      <p></p>
 
-    <button type="submit" class="btn btn-primary">Salvar</button>
-  </form>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="form-group">
+            {{ form_senha.old_password.errors }}
+            <label for="old_password">Senha antiga:</label>
+            {{ form_senha.old_password }}
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <h5>necessario digitar senhas novamente pra concluir atualização.</h5>
+      <p></p>
+
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="form-group">
+            {{ form_senha.new_password1.errors }}
+            <label for="new_password1">Nova senha:</label>
+            {{ form_senha.new_password1 }}
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="form-group">
+            {{ form_senha.new_password2.errors }}
+            <label for="new_password2">Confirmação de senha:</label>
+            {{ form_senha.new_password2 }}
+          </div>
+        </div>
+      </div>
+      <p></p>
+
+      <div class="form-group">
+        <h6>ATENÇÃO</h6>
+        <p>
+          Sua senha não pode ser muito parecida com o resto das suas informações pessoais.<br />
+          Sua senha precisa conter pelo menos 8 caracteres.<br />
+          Sua senha não pode ser uma senha comumente utilizada.<br />
+          Sua senha não pode ser inteiramente numérica.
+        </p>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+  </div>
 {% endblock %}
-
-<!--   
-Sua senha não pode ser muito parecida com o resto das suas informações pessoais.
-Sua senha precisa conter pelo menos 8 caracteres.
-Sua senha não pode ser uma senha comumente utilizada.
-Sua senha não pode ser inteiramente numérica.
-   -->

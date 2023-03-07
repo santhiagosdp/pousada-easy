@@ -35,40 +35,41 @@
       color:blue;
     }
 </style>
-
-<div>
-    <h3>Comandas das reservas em hospedagem</h3>
-    <div class="row">
-        {% for item in hospedados %}
-        <div class="col-md-4">
-            <a href="/comanda/hospedagem/{{ item.id }}">
-                <div class="card2">
-                    <h4>{{ item.reserva.quarto.numero }}</h4>
-                    <p>{{ item.hospede.nome }}</p>
-                    <p>{{ item.reserva.quantidade_hospedes }} hospede(s)</p>
-                    <p>{{ item.reserva.data_entrada }} - {{ item.reserva.data_saida }}</p>
+    <div class="container" style="margin-top: 100px;">
+        <div>
+            <h3>Comandas das reservas em hospedagem</h3>
+            <div class="row">
+                {% for item in hospedados %}
+                <div class="col-md-4">
+                    <a href="/comanda/hospedagem/{{ item.id }}">
+                        <div class="card2">
+                            <h4>{{ item.reserva.quarto.numero }}</h4>
+                            <p>{{ item.hospede.nome }}</p>
+                            <p>{{ item.reserva.quantidade_hospedes }} hospede(s)</p>
+                            <p>{{ item.reserva.data_entrada }} - {{ item.reserva.data_saida }}</p>
+                        </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<div>
-    <h3 class="red">Comandas Pendente Fechamento</h3>
-    <div class="row">
-        {% for item in abertos %}
-        <div class="col-md-4">
-            <div class="card2">
-                <a href="/comanda/hospedagem/{{ item.id }}">
-                    <h4>{{ item.reserva.quarto.numero }}</h4>
-                    <p>{{ item.hospede.nome }}</p>
-                    <p>{{ item.reserva.quantidade_hospedes }} hospede(s)</p>
-                    <p>{{ item.reserva.data_entrada }} - {{ item.reserva.data_saida }}</p>
-                </a>
+                {% endfor %}
             </div>
         </div>
-        {% endfor %}
+
+        <div>
+            <h3 class="red">Comandas Pendente Fechamento</h3>
+            <div class="row">
+                {% for item in abertos %}
+                <div class="col-md-4">
+                    <div class="card2">
+                        <a href="/comanda/hospedagem/{{ item.id }}">
+                            <h4>{{ item.reserva.quarto.numero }}</h4>
+                            <p>{{ item.hospede.nome }}</p>
+                            <p>{{ item.reserva.quantidade_hospedes }} hospede(s)</p>
+                            <p>{{ item.reserva.data_entrada }} - {{ item.reserva.data_saida }}</p>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

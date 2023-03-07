@@ -1,105 +1,107 @@
 {% extends 'base/base.html' %}
 
 {%block content%}
+    <div class="container" style="margin-top: 100px;">
+        <!-- Modal -->
+        <div class="modal fade" id="modalcadastroquarto" tabindex="-1" aria-labelledby="modalcadastroquartoLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalcadastroquartoLabel">Cadastro de novo Produto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" class="form-inline">
+                        {% csrf_token %}
+                        <div class="modal-body"> <!-- INICIO modal-body-->
 
-<!-- Modal -->
-<div class="modal fade" id="modalcadastroquarto" tabindex="-1" aria-labelledby="modalcadastroquartoLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalcadastroquartoLabel">Cadastro de novo Produto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post" class="form-inline">
-                {% csrf_token %}
-                <div class="modal-body"> <!-- INICIO modal-body-->
+                            <div class="row col-md-12"> <!-- INICIO Tipo-->
+                                <label for="nome" class="form-label">Nome:</label>
+                                <input type="text" id="nome" name="nome" class="form-control "
+                                    placeholder="Nome Comercial do Produto" required autofocus>
+                            </div> <!-- FIM Tipo-->
 
-                    <div class="row col-md-12"> <!-- INICIO Tipo-->
-                        <label for="nome" class="form-label">Nome:</label>
-                        <input type="text" id="nome" name="nome" class="form-control "
-                               placeholder="Nome Comercial do Produto" required autofocus>
-                    </div> <!-- FIM Tipo-->
+                            <div class="row"><!-- INICIO Numero e Capacidade -->
+                                <div class="col-md-6">
+                                    <label for="valor_custo" class="form-label espaco_abaixo">valor de Custo:</label>
+                                    <input type="number" id="valor_custo" name="valor_custo" class="form-control" min="0" step="0.01"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="valor_venda" class="form-label espaco_abaixo">valor de Venda:</label>
+                                    <input type="number" id="valor_venda" name="valor_venda" class="form-control" min="0" step="0.01"
+                                        required>
+                                </div>
+                            </div> <!-- fim Numero e Capacidade-->
 
-                    <div class="row"><!-- INICIO Numero e Capacidade -->
-                        <div class="col-md-6">
-                            <label for="valor_custo" class="form-label espaco_abaixo">valor de Custo:</label>
-                            <input type="number" id="valor_custo" name="valor_custo" class="form-control" min="0" step="0.01"
-                                   required>
+                            <div class="row col-md-12"> <!-- INICIO Tipo-->
+                                <label for="descricao" class="form-label espaco_abaixo">Descrição:</label>
+                                <textarea type="text" id="descricao" name="descricao" class="form-control "
+                                        placeholder="Descrição do Produto" required autofocus></textarea>
+                            </div> <!-- FIM Tipo-->
+                        </div> <!-- FIM modal-body-->
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
                         </div>
-                        <div class="col-md-6">
-                            <label for="valor_venda" class="form-label espaco_abaixo">valor de Venda:</label>
-                            <input type="number" id="valor_venda" name="valor_venda" class="form-control" min="0" step="0.01"
-                                   required>
-                        </div>
-                    </div> <!-- fim Numero e Capacidade-->
-
-                    <div class="row col-md-12"> <!-- INICIO Tipo-->
-                        <label for="descricao" class="form-label espaco_abaixo">Descrição:</label>
-                        <textarea type="text" id="descricao" name="descricao" class="form-control "
-                                  placeholder="Descrição do Produto" required autofocus></textarea>
-                    </div> <!-- FIM Tipo-->
-                </div> <!-- FIM modal-body-->
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </form>
                 </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<h1 class="titulo_centro">Produtos Cadastrados</h1>
-
-<div class="row">
-    <div class="col-md-6">
-        <form method="get" id="search-form" class="form-inline">
-            <div class="input-group mb-3">
-                <input class="form-control" type="search" name="search" id="search" placeholder="Buscar Porduto"
-                       aria-label="Buscar"/>
-                <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
             </div>
-        </form>
-    </div>
-    <div class="col-md-5"></div>
-    <div class="col-md-1">
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalcadastroquarto">+Produto
-        </button>
-    </div>
+        </div>
 
-    <div class="row">
-        <table class="table table-striped" id="tabela-produtos">
-            <thead>
-            <tr>
-                <th class="ordenavel">ID</th>
-                <th class="ordenavel">NOME</th>
-                <th class="ordenavel">DESCRIÇÃO</th>
-                <th class="ordenavel">VALOR CUSTO</th>
-                <th class="ordenavel">VALOR VENDA</th>
-                <th>#</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for item in produtos %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.nome }}</td>
-                <td>{{ item.descricao }}</td>
-                <td>{{ item.valor_custo }}</td>
-                <td>{{ item.valor_venda }}</td>
-                <td>
-                    <!--<a type="button" class="far fa-trash-alt" href="/produto/delete/{{item.id}}"
-                       style="font-size:20px; color:#FF0000"></a> -->
-                    
-                    <a type="button" class="btn btn-outline-danger" href="/produto/delete/{{item.id}}">
-                        <span class="far fa-trash-alt"></span>Excluir</a>
-                    <a type="button" class="btn btn-outline-primary" href="/produto/edit/{{item.id}}">Editar</a>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <h1 class="titulo_centro">Produtos Cadastrados</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <form method="get" id="search-form" class="form-inline">
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="search" name="search" id="search" placeholder="Buscar Porduto"
+                            aria-label="Buscar"/>
+                        <button class="btn btn-outline-success" id="search" type="submit">buscar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-5"></div>
+            <div class="col-md-1">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalcadastroquarto">+Produto
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table table-striped" id="tabela-produtos">
+                <thead>
+                <tr>
+                    <th class="ordenavel">ID</th>
+                    <th class="ordenavel">NOME</th>
+                    <th class="ordenavel">DESCRIÇÃO</th>
+                    <th class="ordenavel">VALOR CUSTO</th>
+                    <th class="ordenavel">VALOR VENDA</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in produtos %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.descricao }}</td>
+                    <td>{{ item.valor_custo }}</td>
+                    <td>{{ item.valor_venda }}</td>
+                    <td>
+                        <!--<a type="button" class="far fa-trash-alt" href="/produto/delete/{{item.id}}"
+                        style="font-size:20px; color:#FF0000"></a> -->
+                        
+                        <a type="button" class="btn btn-outline-danger" href="/produto/delete/{{item.id}}">
+                            <span class="far fa-trash-alt"></span>Excluir</a>
+                        <a type="button" class="btn btn-outline-primary" href="/produto/edit/{{item.id}}">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
     {% endblock %}

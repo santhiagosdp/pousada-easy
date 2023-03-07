@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from .forms import EditProfileForm
+#from .forms import EditProfileForm
 
 
 
@@ -36,13 +36,15 @@ def change_password(request):
         post_change_redirect='/'
     )
 
+
+from .forms import EditarUsuarioForm, PasswordChangeCustomForm
 @login_required
 def edit_user(request):
     user = request.user
     if request.method == 'POST':
         print("'111111request.method == 'POST':'")
-        form = UserChangeForm(request.POST, instance = user)
-        form_senha = PasswordChangeForm(request.user, request.POST)
+        form = EditarUsuarioForm(request.POST, instance = user)
+        form_senha = PasswordChangeCustomForm(request.user, request.POST)
         if form.is_valid():
             print('222form.is_valid():')
             user = form.save()
@@ -55,11 +57,11 @@ def edit_user(request):
             return redirect('/')
         else:
             print('444444444form_senha = PasswordChangeForm(request.user)')
-            form_senha = PasswordChangeForm(request.user)
+            form_senha = PasswordChangeCustomForm(request.user)
     else:
         print('5555555form = UserChangeForm(instance=user)')
-        form = UserChangeForm(instance=user)
-        form_senha = PasswordChangeForm(request.user)
+        form = EditarUsuarioForm(instance=user)
+        form_senha = PasswordChangeCustomForm(request.user)
     return render(request, 'registration/edit_user.html', {'form': form, 'form_senha' : form_senha })
 
 

@@ -1,42 +1,37 @@
 {% extends 'base/base.html' %}
 
 {%block content%}
+    <div class="container" style="margin-top: 100px;">
+        <form method="post" class="form-inline">
+            {% csrf_token %}
+            <div class="row"> 
+                <div class="col-md-4">
+                    <label for="tipo" class="form-label espaco_abaixo">Tipo:</label>
+                    <input type="text" id="tipo" name="tipo" class="form-control " placeholder="Tipo do Quarto" value="{{quarto.tipo}}" required autofocus>
+                </div>
 
-<form method="post" class="form-inline">
-    {% csrf_token %}
-    <div class="container">
+                <div class="col-md-4">
+                    <label for="numero" class="form-label espaco_abaixo">Número:</label>
+                    <input type="number" id="numero" name="numero" class="form-control" value="{{quarto.numero}}" required>
+                </div>
 
-        <div class="row col-md-4"> 
+                <div class="col-md-4">
+                    <label for="capacidade" class="form-label espaco_abaixo">Capacidade:</label>
+                    <input type="number" id="capacidade" name="capacidade" class="form-control" value="{{quarto.capacidade}}" required>
+                </div>
+            </div>                    
 
-            <div class="col-md-4">  <!-- INICIO Tipo, Numero e Capacidade -->
-                <label for="tipo" class="form-label espaco_abaixo">Tipo:</label>
-                <input type="text" id="tipo" name="tipo" class="form-control " placeholder="Tipo do Quarto"
-                    value="{{quarto.tipo}}" required autofocus>
-            </div>
-
-            <div class="col-md-4">
-                <label for="numero" class="form-label espaco_abaixo">Número:</label>
-                <input type="number" id="numero" name="numero" class="form-control" value="{{quarto.numero}}" required>
-            </div>
-
-            <div class="col-md-4">
-                <label for="capacidade" class="form-label espaco_abaixo">Capacidade:</label>
-                <input type="number" id="capacidade" name="capacidade" class="form-control" value="{{quarto.capacidade}}" required>
-            </div>
+            <div class="row col-md-12"> 
+                <label for="descricao" class="form-label espaco_abaixo">Descrição:</label>
+                <textarea type="text" id="descricao" name="descricao" class="form-control " placeholder="Descrição do Quarto" required autofocus>{{quarto.descricao}}</textarea>
+            </div> 
             
-        </div>
+            <br>
+            <div class="text-end">
+                <a type="button" class="btn btn-secondary" href="{% url 'quartos' %}">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
 
-        <div class="row col-md-12"> 
-            <label for="descricao" class="form-label espaco_abaixo">Descrição:</label>
-            <textarea type="text" id="descricao" name="descricao" class="form-control "
-                      placeholder="Descrição do Quarto" required autofocus>{{quarto.descricao}}</textarea>
-        </div> 
-    </div> 
-
-    <div class="modal-footer">
-        <a type="button" class="btn btn-secondary" href="{% url 'quartos' %}">Cancelar</a>
-        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
     </div>
-</form>
-
 {% endblock %}
