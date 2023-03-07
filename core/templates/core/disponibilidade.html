@@ -136,7 +136,7 @@
             <td style="white-space: nowrap;">{{ item.valor_total|intcomma }}</td>
             <td style="white-space: nowrap;">
               <a type="button" class="btn btn-outline-danger" href="/hospedagem/delete/{{ item.id }}" title="deletar"><span class="far fa-trash-alt"></span>Excluir</a>
-              <a type="button" class="btn btn-outline-success" href="/hospedagem/concluir/{{ item.id }}" title="Fazer Check-out">Check-out</a>
+              <a type="button" class="btn btn-outline-success" href="/hospedagem/checkout/{{ item.id }}" title="Fazer Check-out">Check-out</a>
             </td>
           </tr>
         {% endfor %}

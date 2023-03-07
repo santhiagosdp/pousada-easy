@@ -668,3 +668,35 @@ def disponibilidade(request):
                'hoje': date.today().strftime('%Y/%m/%d'),
                }
     return render(request, 'core/disponibilidade.html', context)
+
+
+def fechar_conta_checkout(request,id):
+    hospede_reserva = Hospedes_reserva.objects.get(id=id,
+                                                   usuario=request.user,
+                                                   habilitado=True
+                                                   )
+
+    produtos_comanda = Comanda_consumo.objects.filter(usuario=request.user,
+                                                      habilitado=True,
+                                                      hospedes_reserva=hospede_reserva
+                                                      )
+
+    #definir valor final da comanda
+    valor_comanda = hospede_reserva.reserva.valor
+    for item in produtos_comanda:
+        valor_comanda = valor_comanda + item.produto.valor_venda
+
+    if request.method == 'POST':
+        print("entrou post")
+  
+
+    produtos_comanda_com_indices = [(i + 1, p) for i, p in enumerate(produtos_comanda)]
+    #produtos_comanda.append(item_hospedagem)
+
+    context = {
+        'titulo' : "Fechamento de conta",
+        'hospede_reserva': hospede_reserva,
+        "produtos_comanda": produtos_comanda_com_indices,
+        "valor_comanda": valor_comanda
+    }
+    return render(request, 'core/fechar_conta.html', context)

@@ -2,41 +2,41 @@
 {% load humanize %}
 
 {% block content %}
-<style>
-    .container2 {
-      padding: 10px;
-      background-color: #f2f2f2;
-      max-width: auto;
-      margin: auto;
-      border-radius: 5px;
-      margin-top: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-    .card {
-      width: 300px;
-      height: 200px;
-      background-color: wheat;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 10px;
-      margin: 10px;
-    }
-    .col-md-3 {
-      padding: 5px;
-    }
-    
-    h3 {
-      text-align: center;
-      font-family: Georgia, 'Times New Roman', Times, serif;
-    }
-    .titulo {
-      margin-top: 10px;
-    }
-    .form-cor {
-      background-color: #7a8fcabe;
-    }
+    <style>
+        .container2 {
+        padding: 10px;
+        background-color: #f2f2f2;
+        max-width: auto;
+        margin: auto;
+        border-radius: 5px;
+        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .card {
+        width: 300px;
+        height: 200px;
+        background-color: wheat;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        }
+        .col-md-3 {
+        padding: 5px;
+        }
+        
+        h3 {
+        text-align: center;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        .titulo {
+        margin-top: 10px;
+        }
+        .form-cor {
+        background-color: #7a8fcabe;
+        }
 
-</style>
+    </style>
     <div class="container" style="margin-top: 100px;">
         <div class="titulo">
             <h3>Controle de comanda por Quarto</h3>
@@ -55,16 +55,16 @@
                         <strong>Telefone:</strong> {{ hospede_reserva.hospede.telefone }}
                     </p>
                     <p for="quarto">
-                        <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }}
+                        <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }} - {{ hospede_reserva.reserva.quarto.tipo }}
                     </p>
                 </div>
 
                 <div class="col-md-6">
                     <p for="checkin">
-                        <strong>Checkin:</strong> {{ hospede_reserva.reserva.data_entrada }}
+                        <strong>Check-in:</strong> {{ hospede_reserva.reserva.data_entrada }}
                     </p>
                     <p for="checkout">
-                        <strong>Checkout:</strong> {{ hospede_reserva.reserva.data_saida }}
+                        <strong>Check-out:</strong> {{ hospede_reserva.reserva.data_saida }}
                     </p>
                     <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para 
                         {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
@@ -108,12 +108,12 @@
             <table class="table table-striped" id="tabela-produtos">
                 <thead>
                 <tr>
-                    <th class="ordenavel">Item</th>
+                    <th class="ordenavel">#</th>
                     <th class="ordenavel text-center">Data/Horas</th>
                     <th class="ordenavel">Nome</th>
                     <th class="ordenavel">Descrição</th>
                     <th class="ordenavel text-center">Valor</th>
-                    <th>#</th>
+                    <th>Ação</th>
                 </tr>
                 </thead>
                 <tbody>
