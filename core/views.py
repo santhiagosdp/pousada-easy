@@ -693,10 +693,21 @@ def fechar_conta_checkout(request,id):
     produtos_comanda_com_indices = [(i + 1, p) for i, p in enumerate(produtos_comanda)]
     #produtos_comanda.append(item_hospedagem)
 
+    desconto = request.GET.get('desconto')
+    if desconto:
+        desconto = float(desconto)
+        final = float(valor_comanda-desconto)
+    else:
+        desconto = float(0)
+        final = valor_comanda
+
+
     context = {
         'titulo' : "Fechamento de conta",
         'hospede_reserva': hospede_reserva,
         "produtos_comanda": produtos_comanda_com_indices,
-        "valor_comanda": valor_comanda
+        "valor_comanda": valor_comanda,
+        'desconto': desconto,
+        'final': final
     }
     return render(request, 'core/fechar_conta.html', context)

@@ -45,7 +45,7 @@
         <div class="container2">
             <h5 style="color: red;">Dados da Hospedagem</h5>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <p for="nome">
                         <strong>Nome:</strong> {{ hospede_reserva.hospede.nome }}
                     </p>
@@ -56,12 +56,12 @@
                         <strong>Telefone:</strong> {{ hospede_reserva.hospede.telefone }}
                     </p>
                     <p for="cidade">
-                        <strong>Cidade:</strong> {{ hospede_reserva.hospede.cidade }}/{{ hospede_reserva.hospede.estado }}
+                        <strong>Cidade:</strong> {{ hospede_reserva.hospede.endereco.cidade }}/{{ hospede_reserva.hospede.endereco.estado }}
                     </p>
                     
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <p for="quarto">
                         <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }}
                     </p>
@@ -75,6 +75,17 @@
                         {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
                     
                 </div>
+
+                <div class="col-md-2">
+                    <form method="get">
+                        <label style="color:red" for="desconto"> Inserir desconto:</label>
+                        <div class="input-group mb-3">
+                            <input style="color:red" class="form-control" type="number" name="desconto" id="desconto" min="0" step="0.01" required>
+                            <button class="btn btn-outline-success" id="search" type="submit">Lançar</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
 
@@ -84,46 +95,62 @@
                 <table class="table table-striped" id="tabela-produtos">
                     <thead>
                     <tr>
-                        <th class="ordenavel">#</th>
-                        <th class="ordenavel text-center">Data/Horas</th>
-                        <th class="ordenavel">Nome</th>
-                        <th class="ordenavel">Descrição</th>
-                        <th class="ordenavel text-center">Valor</th>
-                        <th>Ação</th>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Data/Horas</th>
+                        <th class="">Nome</th>
+                        <th class="">Descrição</th>
+                        <th class=" text-center">Valor</th>
+                        <!--<th>Ação</th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>-</td>
+                        <td class="text-center">-</td>
                         <td class="text-center">{{ hospede_reserva.reserva.data_criacao }}</td>
                         <td>{{hospede_reserva.reserva.quarto.tipo }}</td>
-                        <td>Hospedagem: {{ hospede_reserva.reserva.quarto.descricao}} Quarto: {{ hospede_reserva.reserva.quarto.numero}}</td>
+                        <td>Hospedagem: {{ hospede_reserva.reserva.diarias }} Diária(s) Para <br> {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s). Quarto número: {{ hospede_reserva.reserva.quarto.numero}}</td>
                         <td class="text-center">{{ hospede_reserva.reserva.valor|intcomma }}</td>
-                        <td>
+                       <!-- <td>
                             <a type="button" class="btn btn-outline-danger" href="#">
                                 <span class="far fa-trash-alt"></span>Excluir</a>
-                        </td>
+                        </td>-->
                     </tr>
                                             
                     {% for indice, item in produtos_comanda %}
                     <tr>
-                        <td>{{indice}}</td>
+                        <td class="text-center">{{indice}}</td>
                         <td class="text-center">{{ item.data_criacao }}</td>
                         <td>{{ item.produto.nome }}</td>
                         <td>{{ item.produto.descricao }}</td>
                         <td class="text-center">{{ item.produto.valor_venda|intcomma }}</td>
-                        <td>
+                        <!--<td>
                             <a type="button" class="btn btn-outline-danger" href="/comanda/produto/delete/{{ item.id }}/{{ hospede_reserva.id }}">
                                 <span class="far fa-trash-alt"></span>Excluir</a>
-                        </td>
+                        </td> -->
                     </tr>
                     {% endfor %}
+                    <tr>
+                        <td class="text-center"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total: R$ {{valor_comanda|intcomma}}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="color:red"> Desconto: R$ -{{desconto|intcomma}}</td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <th class="text-end">Valor Total: R$ {{valor_comanda|intcomma}}</th>
+                        <th style="color:blue"> FINAL: R$ {{final|intcomma}}</th>
                         <td></td>
                     </tr>
                     </tbody>
