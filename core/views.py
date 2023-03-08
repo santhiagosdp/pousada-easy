@@ -261,7 +261,7 @@ def comandas(request):
     abertos = []
     hoje = date.today()  # checkin tem que ser antes e checkout depois
     for item in hospedados:
-        if item.reserva.data_entrada < hoje and item.reserva.data_saida >= hoje and item.status == "CHECK-IN":
+        if item.reserva.data_entrada <= hoje and item.reserva.data_saida >= hoje and item.status == "CHECK-IN":
             aux.append(item)
             # print (item)
         if item.reserva.data_saida < hoje and item.status != "CHECK-OUT":
