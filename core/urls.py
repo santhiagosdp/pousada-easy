@@ -10,9 +10,9 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
 
     path('accounts/', include('django.contrib.auth.urls')),  # LOGIN
-    path('accounts/logout/', views.logout_view, name='logout'),  # LOGOUT
-    path('accounts/editar/perfil/', views.edit_user, name='edit_user'),  # edit_user
-    path('accounts/editar/empresa/', views.edit_empresa, name='edit_empresa'),  # edit_empresa
+    path('accounts/logout', views.logout_view, name='logout'),  # LOGOUT
+    path('accounts/editar/perfil', views.edit_user, name='edit_user'),  # edit_user
+    path('accounts/editar/empresa', views.edit_empresa, name='edit_empresa'),  # edit_empresa
 
 
     #REETAR SENHA
