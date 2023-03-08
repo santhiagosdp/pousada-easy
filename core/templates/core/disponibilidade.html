@@ -108,7 +108,7 @@
           {% endif %}
 
             <!-- HOSPEDADOS - AZUL -->
-          {% if item.reserva.data_entrada < hoje and item.reserva.data_saida > hoje %}
+          {% if item.reserva.data_entrada <= hoje and item.reserva.data_saida > hoje %}
           <tr style="color: blue">
           {% endif %}
 
