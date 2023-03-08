@@ -57,8 +57,6 @@
         <div id="linha_horizontal"></div>
 
         <p></p>
-        {% if pagina == 'quartos' %}
-
             <div class="row">
                 <div class="col-md-7">
                     <form method="get" id="search-form" class="form-inline">
@@ -129,37 +127,38 @@
                 </form>
             {% endfor %}
 
-        {% endif %}
-
         <div id="linha_horizontal"></div>
         <br>
 
         <div class="row col-auto">
+            {%if quartos%}
             
             <h1 class="text-center">Calendário de ocupação dos quartos</h1>
-            <br>
+            <br>            
 
             <table>
-            <thead>
-                <tr>
-                    <th class="ordenavel text-center">DATA</th>
-                {% for item in quartos %}
-                    <th class="ordenavel text-center">CHALÉ {{item.numero}}</th>
-                {% endfor %}
-                </tr>
+                <thead>
+                    <tr>
+                        <th class="ordenavel text-center">DATA</th>
+                    {% for item in quartos %}
+                        <th class="ordenavel text-center">CHALÉ {{item.numero}}</th>
+                    {% endfor %}
+                    </tr>
 
-            </thead>
-            <tbody>
-                {% for item in lista_disponibilidade %}
-                <tr style="border: 1px solid black;">
-                    <th class="text-center">{{item.data}}</th>
-                {% for quarto in item.quartos %}
-                    <td class="{{quarto.status}} text-center">{{quarto.status}}<br>{{quarto.numero}}</td>
-                {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
+                </thead>
+                <tbody>
+                    {% for item in lista_disponibilidade %}
+                    <tr style="border: 1px solid black;">
+                        <th class="text-center">{{item.data}}</th>
+                    {% for quarto in item.quartos %}
+                        <td class="{{quarto.status}} text-center">{{quarto.status}}<br>{{quarto.numero}}</td>
+                    {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
+
+            {%endif%}
 
         </div>
     </div>
