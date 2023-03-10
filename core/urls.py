@@ -46,6 +46,8 @@ urlpatterns = [
     path('hospedagem/checkin/<id>', views.hospedagem_checkin, name='hospedagem_checkin'),
     path('hospedagem/checkout/<id>', views.fechar_conta_checkout, name='fechar_conta_checkout'), #checkout
     path('hospedagem/concluir/<id>', views.hospedagem_concluir, name='hospedagem_concluir'), #checkout
+    path('hospedagem/editar/<id>', views.hospedagem_edit, name='hospedagem_edit'),
+
 
 
     path('comandas', views.comandas, name='comandas'),

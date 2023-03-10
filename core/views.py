@@ -669,6 +669,15 @@ def disponibilidade(request):
                }
     return render(request, 'core/disponibilidade.html', context)
 
+def hospedagem_edit(request, id):
+    hospede_reserva = Hospedes_reserva.objects.get(usuario = request.user, id=id, habilitado = True)
+
+    context = { 'titulo': 'Reservas Feitas',
+         'hospede_reserva' : hospede_reserva         
+        }
+
+    return render(request, 'core/edicao/hospedagem_edit.html', context)
+
 
 def fechar_conta_checkout(request,id):
     hospede_reserva = Hospedes_reserva.objects.get(id=id,
