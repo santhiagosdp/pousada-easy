@@ -701,13 +701,13 @@ def fechar_conta_checkout(request,id):
     produtos_comanda_com_indices = [(i + 1, p) for i, p in enumerate(produtos_comanda)]
     #produtos_comanda.append(item_hospedagem)
 
+    final = valor_comanda
     desconto = request.GET.get('desconto')
     if desconto:
         desconto = float(desconto)
         final = float(valor_comanda-desconto)
     else:
         desconto = float(0)
-        final = valor_comanda
 
     extras = request.GET.get('extras')
     if extras:
@@ -715,7 +715,7 @@ def fechar_conta_checkout(request,id):
         final = float(valor_comanda+extras)
     else:
         extras = float(0)
-        final = valor_comanda
+        
 
 
     if request.method == 'POST':
