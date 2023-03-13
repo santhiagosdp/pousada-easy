@@ -385,8 +385,8 @@ def hospedagem_delete(request, id):
 
 @login_required
 def hospedagem_concluir(request, id):
+    hospede_reserva = Hospedes_reserva.objects.get(usuario = request.user, id = id, habilitado = True)
     # concluindo Hospede_Reserva
-    hospede_reserva = Hospedes_reserva.objects.get(id=id, usuario=request.user)
     hospede_reserva.status = 'CHECK-OUT'
     hospede_reserva.save()
 
@@ -401,7 +401,7 @@ def hospedagem_concluir(request, id):
     #    comanda.habilitado = False
     #    comanda.save()
 
-    return redirect('disponibilidade')
+    return "redirect('/disponibilidade/')"
 
 
 
@@ -688,8 +688,7 @@ def fechar_conta_checkout(request,id):
     produtos_comanda = Comanda_consumo.objects.filter(usuario=request.user,
                                                       habilitado=True,
                                                       hospedes_reserva=hospede_reserva
-                                                      )
-
+                                                      )    
     #definir valor final da comanda
     valor_comanda = hospede_reserva.reserva.valor
     for item in produtos_comanda:
@@ -710,6 +709,20 @@ def fechar_conta_checkout(request,id):
         desconto = float(0)
         final = valor_comanda
 
+    extras = request.GET.get('extras')
+    if extras:
+        extras = float(extras)
+        final = float(valor_comanda+extras)
+    else:
+        extras = float(0)
+        final = valor_comanda
+
+
+    if request.method == 'POST':
+        #COlocar valor do desconto ou extra para totalizar
+        res = hospedagem_concluir(request, hospede_reserva.id)
+        return redirect("disponibilidade")
+    
 
     context = {
         'titulo' : "Fechamento de conta",
@@ -717,6 +730,7 @@ def fechar_conta_checkout(request,id):
         "produtos_comanda": produtos_comanda_com_indices,
         "valor_comanda": valor_comanda,
         'desconto': desconto,
+        'extras' : extras,
         'final': final
     }
     return render(request, 'core/fechar_conta.html', context)

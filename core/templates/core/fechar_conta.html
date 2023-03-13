@@ -2,160 +2,195 @@
 {% load humanize %}
 
 {% block content %}
-    <style>
-        .container2 {
-        padding: 10px;
-        background-color: #f2f2f2;
-        max-width: auto;
-        margin: auto;
-        border-radius: 5px;
-        margin-top: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        .card {
-        width: 300px;
-        height: 200px;
-        background-color: wheat;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px;
-        }
-        .col-md-3 {
-        padding: 5px;
-        }
-        
-        h3 {
-        text-align: center;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        }
-        .titulo {
-        margin-top: 10px;
-        }
-        .form-cor {
-        background-color: #7a8fcabe;
-        }
+  <style>
+    .container2 {
+      padding: 10px;
+      background-color: #cfe0df1b;
+      max-width: auto;
+      margin: auto;
+      border-radius: 5px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    .card {
+      width: 300px;
+      height: 200px;
+      background-color: wheat;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px;
+    }
+    .col-md-3 {
+      padding: 5px;
+    }
+    
+    h3 {
+      text-align: center;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+    .titulo {
+      margin-top: 10px;
+    }
+    .form-cor {
+      background-color: #7a8fcabe;
+    }
+  </style>
+  <div class="container" style="margin-top: 100px;">
+    <div class="titulo">
+      <h3>CHECK-OUT DE HOSPEDAGEM</h3>
+    </div>
 
-    </style>
-    <div class="container" style="margin-top: 100px;">
-        <div class="titulo">
-            <h3>CHECK-OUT DE HOSPEDAGEM</h3>
+    <div class="container2">
+      <h5 style="color: red;">Dados da Hospedagem</h5>
+      <div class="row">
+        <div class="col-md-5">
+          <p for="nome">
+            <strong>Nome:</strong> {{ hospede_reserva.hospede.nome }}
+          </p>
+          <p for="email">
+            <strong>E-mail:</strong> {{ hospede_reserva.hospede.email }}
+          </p>
+          <p for="telefone">
+            <strong>Telefone:</strong> {{ hospede_reserva.hospede.telefone }}
+          </p>
+          <p for="cidade">
+            <strong>Cidade:</strong> {{ hospede_reserva.hospede.endereco.cidade }}/{{ hospede_reserva.hospede.endereco.estado }}
+          </p>
         </div>
 
-        <div class="container2">
-            <h5 style="color: red;">Dados da Hospedagem</h5>
-            <div class="row">
-                <div class="col-md-5">
-                    <p for="nome">
-                        <strong>Nome:</strong> {{ hospede_reserva.hospede.nome }}
-                    </p>
-                    <p for="email">
-                        <strong>E-mail:</strong> {{ hospede_reserva.hospede.email }}
-                    </p>
-                    <p for="telefone">
-                        <strong>Telefone:</strong> {{ hospede_reserva.hospede.telefone }}
-                    </p>
-                    <p for="cidade">
-                        <strong>Cidade:</strong> {{ hospede_reserva.hospede.endereco.cidade }}/{{ hospede_reserva.hospede.endereco.estado }}
-                    </p>
-                    
-                </div>
-
-                <div class="col-md-4">
-                    <p for="quarto">
-                        <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }}
-                    </p>
-                    <p for="checkin">
-                        <strong>Check-in:</strong> {{ hospede_reserva.reserva.data_entrada }}
-                    </p>
-                    <p for="checkout">
-                        <strong>Check-out:</strong> {{ hospede_reserva.reserva.data_saida }}
-                    </p>
-                    <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para 
-                        {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
-                    
-                </div>
-
-                <div class="col-md-2">
-                    <form method="get">
-                        <label style="color:red" for="desconto"> Inserir desconto:</label>
-                        <div class="input-group mb-3">
-                            <input style="color:red" class="form-control" type="number" name="desconto" id="desconto" min="0" step="0.01" required>
-                            <button class="btn btn-outline-success" id="search" type="submit">Lançar</button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
+        <div class="col-md-4">
+          <p for="quarto">
+            <strong>Quarto:</strong> {{ hospede_reserva.reserva.quarto.numero }}
+          </p>
+          <p for="checkin">
+            <strong>Check-in:</strong> {{ hospede_reserva.reserva.data_entrada }}
+          </p>
+          <p for="checkout">
+            <strong>Check-out:</strong> {{ hospede_reserva.reserva.data_saida }}
+          </p>
+          <p for="diarias">São {{ hospede_reserva.reserva.diarias }} Diária(s) Para
+            {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s)</p>
         </div>
 
-        <div class="container2">
-            <h5 style="color: red;">Itens de cobrança</h5>
-            <div class="row">
-                <table class="table table-striped" id="tabela-produtos">
-                    <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th class="text-center">Data/Horas</th>
-                        <th class="">Nome</th>
-                        <th class="">Descrição</th>
-                        <th class=" text-center">Valor</th>
-                        <!--<th>Ação</th>-->
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="text-center">-</td>
-                        <td class="text-center">{{ hospede_reserva.reserva.data_criacao }}</td>
-                        <td>{{hospede_reserva.reserva.quarto.tipo }}</td>
-                        <td>Hospedagem: {{ hospede_reserva.reserva.diarias }} Diária(s) Para <br> {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s). Quarto número: {{ hospede_reserva.reserva.quarto.numero}}</td>
-                        <td class="text-center">{{ hospede_reserva.reserva.valor|intcomma }}</td>
-                       <!-- <td>
+        <div class="col-md-2">
+          <div class="row">
+            <form method="get">
+              <label style="color:red" for="desconto"><strong>Desconto:</strong></label>
+              <div class="input-group mb-3">
+                <input style="color:red" class="form-control" type="number" name="desconto" id="desconto" min="0" step="0.01" required />
+                <button class="btn btn-outline-success" id="search" type="submit">Lançar</button>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <form method="get">
+              <label style="color:blue" for="extras"><strong>Extras:</strong></label>
+              <div class="input-group mb-3">
+                <input style="color:blue" class="form-control" type="number" name="extras" id="extras" min="0" step="0.01" required />
+                <button class="btn btn-outline-success" id="search" type="submit">Lançar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container2">
+      <h5 style="color: red;">Itens de cobrança</h5>
+      <div class="row">
+        <div class="col-sm-10">
+          <table class="table" id="tabela-produtos">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Data/Horas</th>
+                <th class="">Nome</th>
+                <th class="">Descrição</th>
+                <th class="text-center">Valor</th>
+                <!-- <th>Ação</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center">-</td>
+                <td>{{ hospede_reserva.reserva.data_criacao }}</td>
+                <td>{{ hospede_reserva.reserva.quarto.tipo }}</td>
+                <td>
+                  Hospedagem: {{ hospede_reserva.reserva.diarias }} Diária(s) Para <br /> {{ hospede_reserva.reserva.quantidade_hospedes }} hospede(s). Quarto número: {{ hospede_reserva.reserva.quarto.numero }}
+                </td>
+                <td class="text-center">{{ hospede_reserva.reserva.valor|intcomma }}</td>
+                <!--     <td>
                             <a type="button" class="btn btn-outline-danger" href="#">
                                 <span class="far fa-trash-alt"></span>Excluir</a>
-                        </td>-->
-                    </tr>
-                                            
-                    {% for indice, item in produtos_comanda %}
-                    <tr>
-                        <td class="text-center">{{indice}}</td>
-                        <td class="text-center">{{ item.data_criacao }}</td>
-                        <td>{{ item.produto.nome }}</td>
-                        <td>{{ item.produto.descricao }}</td>
-                        <td class="text-center">{{ item.produto.valor_venda|intcomma }}</td>
-                        <!--<td>
+                        </td>    -->
+              </tr>
+
+              {% for indice, item in produtos_comanda %}
+                <tr>
+                  <td class="text-center">{{ indice }}</td>
+                  <td>{{ item.data_criacao }}</td>
+                  <td>{{ item.produto.nome }}</td>
+                  <td>{{ item.produto.descricao }}</td>
+                  <td class="text-center">{{ item.produto.valor_venda|intcomma }}</td>
+                  <!--    <td>
                             <a type="button" class="btn btn-outline-danger" href="/comanda/produto/delete/{{ item.id }}/{{ hospede_reserva.id }}">
                                 <span class="far fa-trash-alt"></span>Excluir</a>
-                        </td> -->
-                    </tr>
-                    {% endfor %}
-                    <tr>
-                        <td class="text-center"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>Total: R$ {{valor_comanda|intcomma}}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="text-center"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td style="color:red"> Desconto: R$ -{{desconto|intcomma}}</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <th style="color:blue"> FINAL: R$ {{final|intcomma}}</th>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </td>     -->
+                </tr>
+              {% endfor %}
+              <tr>
+                <td class="text-center"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total: R$ {{ valor_comanda|intcomma }}</td>
+                <td></td>
+              </tr>
+
+              <tr>
+                <td class="text-center"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                {% if extras > 0 %}
+                  <td style="color:blue">Extras: R$ +{{ extras|intcomma }}</td>
+                {% endif %}
+
+                {% if desconto > 0 %}
+                  <td style="color:red">Desconto: R$ -{{ desconto|intcomma }}</td>
+                {% endif %}
+
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <th style="color:blue">FINAL: R$ {{ final|intcomma }}</th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <div class="col-sm-2">
+          <div class="row">
+            <form method="post">
+              {% csrf_token %}
+              <div class="input-group mb-3" style="padding-top: 50%;">
+                <button class="btn btn-success mx-auto" id="search" type="submit">Emitir Check-out</button>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <div class="input-group mb-3">
+              <a class="btn btn-outline-secondary mx-auto" id="voltar" href="/disponibilidade/">Voltar</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 {% endblock %}
