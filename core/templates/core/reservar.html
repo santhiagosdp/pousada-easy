@@ -2,6 +2,13 @@
 
 {% block content %}
     <style>
+        table, th {
+          font-size: 12px;
+        }
+        table, td {
+            font-size: 12px;
+        }
+
         /* Define a cor de fundo para quartos disponíveis */
         .Disponivel {
         background-color: greenyellow;
@@ -133,7 +140,7 @@
         <div class="row col-auto">
             {%if quartos%}
             
-            <h1 class="text-center">Calendário de ocupação dos quartos</h1>
+            <h5 class="text-center">Ocupação dos quartos</h5>
             <br>            
 
             <table>
@@ -151,7 +158,7 @@
                     <tr style="border: 1px solid black;">
                         <th class="text-center">{{item.data}}</th>
                     {% for quarto in item.quartos %}
-                        <td class="{{quarto.status}} text-center">{{quarto.status}}<br>{{quarto.numero}}</td>
+                        <td class="{{quarto.status}} text-center">{{quarto.numero}}<br>{{quarto.status}}</td>
                     {% endfor %}
                     </tr>
                     {% endfor %}

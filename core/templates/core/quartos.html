@@ -1,6 +1,15 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+
+<style>
+    table, th {
+      font-size: 14px;
+    }
+    table, td {
+      font-size: 14px;
+    }
+</style>
     <div class="container" style="margin-top: 100px;">
         <!-- Modal -->
         <div class="modal fade" id="modalcadastroquarto" tabindex="-1" aria-labelledby="modalcadastroquartoLabel"
@@ -68,28 +77,28 @@
         </div>
 
         <div class="row">
-            <table class="table table-striped" id="tabela-produtos">
+            <table class="table" style="background-color:honeydew;" id="tabela-produtos">
                 <thead>
                 <tr>
-                    <th class="ordenavel">Número:</th>
+                    <th class="ordenavel text-center">Número:</th>
                     <th class="ordenavel">Tipo:</th>
                     <th class="ordenavel">Capacidade:</th>
                     <th class="ordenavel">Descrição:</th>
-                    <th>#</th>
+                    <th class=" text-center">#</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for item in quartos %}
                 <tr>
-                    <td>{{ item.numero }}</td>
-                    <td>{{ item.tipo }}</td>
-                    <td>{{ item.capacidade }} Pessoas</td>
-                    <td>{{ item.descricao }}</td>
-                    <td>
-                        <a type="button" class="btn btn-outline-danger" href="/quarto/delete/{{item.id}}">
+                    <td class=" text-center">{{ item.numero }}</td>
+                    <td >{{ item.tipo }}</td>
+                    <td >{{ item.capacidade }} Pessoas</td>
+                    <td >{{ item.descricao }}</td>
+                    <td class=" text-center">
+                        <a type="button" style="font-size: 12px;" class="btn btn-outline-danger" href="/quarto/delete/{{item.id}}">
                             <span class="far fa-trash-alt"></span>Excluir</a>
 
-                        <a type="button" class="btn btn-outline-primary" href="/quarto/edit/{{item.id}}">Editar</a>
+                        <a type="button" style="font-size: 12px;" class="btn btn-outline-primary" href="/quarto/edit/{{item.id}}">Editar</a>
                     </td>
                 </tr>
                 {% endfor %}

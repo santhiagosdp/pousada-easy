@@ -3,6 +3,12 @@
 
 {% block content %}
   <style>
+    table, th {
+      font-size: 14px;
+    }
+    table, td {
+      font-size: 14px;
+    }
     .botao2 {
       background-color: blue;
       color: white;
@@ -36,7 +42,7 @@
     }
   </style>
 
-  <div class="container" style="margin-top: 100px;">
+  <div class="container" style="margin-top: 50px;">
     <h1 class="titulo_centro">Reservas</h1>
 
     <form method="get" id="search-form" class="form-inline">
@@ -83,21 +89,21 @@
     </form>
 
     <br />
-  </div>
-    <table class="table" id="tabela-produtos">
+  
+    <table class="table" style="background-color:honeydew;" id="tabela-produtos">
       <thead>
         <tr>
-          <th class="ordenavel" style="white-space: nowrap;">ENTRADA</th>
-          <th class="ordenavel" style="white-space: nowrap;">QUARTO</th>
-          <th class="ordenavel" style="white-space: nowrap;">HÓSPEDE</th>
-          <th class="ordenavel" style="white-space: nowrap;">CHECK-IN</th>
-          <th class="ordenavel" style="white-space: nowrap;">CHECK-OUT</th>
-          <th class="ordenavel" style="white-space: nowrap;">DIÁRIAS</th>
-          <th class="ordenavel" style="white-space: nowrap;">STATUS</th>
-          <th class="ordenavel" >VALOR DIÁRIAS</th>
-          <th class="ordenavel" >VALOR COMANDA</th>
-          <th class="ordenavel" >VALOR TOTAL</th>
-          <th>FINALIZAR</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">ENTRADA</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">QUARTO</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">HÓSPEDE</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">CHECK-IN</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">CHECK-OUT</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">DIÁRIAS</th>
+          <th class="ordenavel text-center" style="white-space: nowrap;">STATUS</th>
+          <th class="ordenavel text-center" >VALOR DIÁRIAS</th>
+          <th class="ordenavel text-center" >VALOR COMANDA</th>
+          <th class="ordenavel text-center" >VALOR TOTAL</th>
+          <th class="text-center" style="white-space: nowrap;">FINALIZAR</th>
         </tr>
       </thead>
       <tbody>
@@ -122,29 +128,30 @@
            <tr style="color: OrangeRed">
            {% endif %}
 
-            <td style="white-space: nowrap;">
-              <a type="button" class="btn btn-outline-primary" href="/hospedagem/checkin/{{ item.id }}" title="Fazer Check-in">
+            <td class="text-center"  style="white-space: nowrap;">
+              <a type="button" style="font-size: 12px;" class="btn btn-outline-primary" href="/hospedagem/checkin/{{ item.id }}" title="Fazer Check-in">
                 <span class="fa fa-solid fa-check"></span> Check-in</a>
-              <a type="button" class="btn btn-outline-success" href="/hospedagem/editar/{{ item.id }}" title="Editar">
+              <a type="button" style="font-size: 12px;" class="btn btn-outline-success" href="/hospedagem/editar/{{ item.id }}" title="Editar">
                 <span class="fa fa-solid fa-check"></span> Editar</a>
             </td>
-            <td style="white-space: nowrap;">{{ item.reserva.quarto.numero }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.reserva.quarto.numero }}</td>
             <td style="white-space: nowrap;">{{ item.hospede.nome }}</td>
-            <td style="white-space: nowrap;">{{ item.reserva.data_entrada }}</td>
-            <td style="white-space: nowrap;">{{ item.reserva.data_saida }}</td>
-            <td style="white-space: nowrap;">{{ item.reserva.diarias }}</td>
-            <td style="white-space: nowrap;">{{ item.status }}</td>
-            <td style="white-space: nowrap;">{{ item.reserva.valor|intcomma }}</td>
-            <td style="white-space: nowrap;">{{ item.valor_comanda|intcomma }}</td>
-            <td style="white-space: nowrap;">{{ item.valor_total|intcomma }}</td>
-            <td style="white-space: nowrap;">
-              <a type="button" class="btn btn-outline-danger" href="/hospedagem/delete/{{ item.id }}" title="deletar"><span class="fa fa-solid fa-trash"></span> Excluir</a>
-              <a type="button" class="btn btn-outline-success" href="/hospedagem/checkout/{{ item.id }}" title="Fazer Check-out">Check-out</a>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.reserva.data_entrada }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.reserva.data_saida }}</td>
+            <td class="text-center" style="white-space: nowrap;">{{ item.reserva.diarias }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.status }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.reserva.valor|intcomma }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.valor_comanda|intcomma }}</td>
+            <td class="text-center"  style="white-space: nowrap;">{{ item.valor_total|intcomma }}</td>
+            <td class="text-center"  style="white-space: nowrap;">
+              <a type="button" style="font-size: 12px;" class="btn btn-outline-danger" href="/hospedagem/delete/{{ item.id }}" title="deletar"><span class="fa fa-solid fa-trash"></span> Excluir</a>
+              <a type="button" style="font-size: 12px;" class="btn btn-outline-success" href="/hospedagem/checkout/{{ item.id }}" title="Fazer Check-out">Check-out</a>
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+  </div>
 {% endblock %}
 
 

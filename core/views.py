@@ -679,6 +679,7 @@ def hospedagem_edit(request, id):
     return render(request, 'core/edicao/hospedagem_edit.html', context)
 
 
+import pandas as pd
 def fechar_conta_checkout(request,id):
     hospede_reserva = Hospedes_reserva.objects.get(id=id,
                                                    usuario=request.user,
@@ -732,5 +733,7 @@ def fechar_conta_checkout(request,id):
         'desconto': desconto,
         'extras' : extras,
         'final': final
-    }
+    }    
+
+
     return render(request, 'core/fechar_conta.html', context)
